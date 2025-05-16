@@ -33,6 +33,7 @@ export interface VerifyEmailDto {
 export interface ResetPasswordDto {
   token: string;
   newPassword: string;
+  confirmPassword: string;
 };
 
 export interface RequestPasswordResetDto {

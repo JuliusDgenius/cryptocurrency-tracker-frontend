@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, TextField } from '@mui/material';
+import { Alert, Button, CircularProgress, Container, TextField, Typography, Box } from '@mui/material';
 import { LoginDto } from '../../../types/auth';
 import { loginSchema } from '../../../schemas/auth';
 import { useState } from 'react';
@@ -31,7 +31,6 @@ export const LoginForm = () => {
         const response = await authApi.login(data);
         await login(response.data);
         navigate('/dashboard')
-        // TODO: store token and redirect
       } catch (err) {
         const error = err as AxiosError
         setError(error.response?.statusText || 'Login failed')
@@ -41,34 +40,76 @@ export const LoginForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='max-w-md space-y-4'>
-          {error && <div className='text-red-500'>{error}</div>}
+      <Container maxWidth="sm">
 
-            <TextField 
-              fullWidth
-              label="email"
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              {...register('email')}
-            />
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{
+            mt: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 3
+          }}
+        >
+          <Typography>
+            Login
+          </Typography>
 
-            <TextField 
-              fullWidth
-              type="password"
-              label="password"
-              error={!!errors.password}
-              helperText={errors.password?.message}
-              {...register('password')}
-            />
+          {error && (
+            <Alert severity="error" sx={{width: '100%'}}>
+              {error}
+            </Alert>
+          )}
 
-            <Button
-              type="submit"
-              disabled={isLoading}
-              variant="contained"
-              fullWidth
-            >
-              {isLoading ? 'Signing In...' : 'Sign In'}
-            </Button>
-        </form>
+          <TextField 
+            fullWidth
+            label="Email"
+            error={!!errors.email}
+            helperText={errors.email?.message}
+            {...register('email')}
+            variant='outlined'
+            sx={{
+              '& .MuiInputLabel-root': { mb: 1, color: '#1a202c' },
+              '& .MuiOutlinedInput-root': { mt: 1 },
+              '& .MuiInputBase-input': { color: '#1a202c' },
+            }}
+          />
+
+          <TextField 
+            fullWidth
+            type="password"
+            label="Password"
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            {...register('password')}
+            variant='outlined'
+            sx={{
+              '& .MuiInputLabel-root': { mb: 1, color: '#1a202c' },
+              '& .MuiOutlinedInput-root': { mt: 1 },
+              '& .MuiInputBase-input': { color: '#1a202c' }
+            }}
+          />
+
+          <Button
+            type="submit"
+            disabled={isLoading}
+            variant="contained"
+            fullWidth
+            size='large'
+            sx={{ mt: 2, py: 1.5 }}
+          >
+            {isLoading && (
+              <Box sx={{ position: 'absolute', color: 'primary.light' }}>
+                <CircularProgress size={24} />
+                <span style={{ visibility: 'hidden' }}>
+                  Sign In
+                </span>
+              </Box>
+            )}
+            {!isLoading && 'Sign In'}
+          </Button>
+        </Box>
+      </Container>
     );
 };

@@ -7,6 +7,7 @@ import { Navbar } from './components/NavBar';
 import { VerifyEmailPage } from './features/auth/pages/VerifyEmailPage';
 import { PasswordResetRequestPage } from './features/auth/pages/RequestPasswordResetPage';
 import { ResetPasswordPage } from './features/auth/pages/ResetPasswordPage';
+import HomePage from './features/home/HomePage';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
       <main className='container mx-auto p-4'>
         <Routes>
           {/* Home Page */}
-          <Route index path='/' element={<div>Home Page</div>} />
+          <Route index path='/' element={<HomePage />} />
           
           {/* Authentication Routes */}
           <Route path="/login" element={<LoginPage />} />

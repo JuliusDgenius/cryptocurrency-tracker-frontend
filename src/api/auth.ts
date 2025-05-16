@@ -23,8 +23,8 @@ export const authApi = {
   },
 
   // Password Management
-  requestPasswordReset: async (email: string) => {
-    return api.post('/auth/password-reset-request', email);
+  requestPasswordReset: async (data: { email: string }) => {
+    return api.post('/auth/password-reset-request', data);
   },
   resetPassword: async (data: ResetPasswordDto) => {
     return api.post('/auth/reset-password', data);

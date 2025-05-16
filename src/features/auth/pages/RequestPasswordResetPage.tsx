@@ -1,12 +1,16 @@
+import { Container, Box, Typography } from "@mui/material";
 import { PasswordResetRequestForm } from "../components/RequestPasswordResetForm";
 
 export const PasswordResetRequestPage = () => {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold nb-6 text-center">Crypto Tracker Request Password Reset</h2>
+      <Container maxWidth="md" sx={{ 
+        minHeight: '100vh', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', p: 4
+        }}>
+        <Box sx={{ width: '100%', bgcolor: 'white', p: 4, borderRadius: 2, boxShadow: 3 }}>
+          <Typography variant="h4" component="h2" gutterBottom align="center">Request Password Reset</Typography>
           <PasswordResetRequestForm />
-        </div>
-      </div>
+        </Box>
+      </Container>
     );
 };
