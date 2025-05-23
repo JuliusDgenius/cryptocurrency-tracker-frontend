@@ -1,93 +1,128 @@
-import { Button, TextField, Container, Box, Alert, LinearProgress } from '@mui/material';
-import { authApi } from '../../../api/auth';
+import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { RequestPasswordResetDto } from '../../../types/auth';
-import { RequestPasswordResetSchema } from '../../../schemas/auth';
-import { z } from 'zod';
+import { useNavigate } from 'react-router-dom';
+import { authApi } from '../../../api/auth';
+import { RequestPasswordResetDto, RequestPasswordResetSchema } from '../../../schemas/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Container, Button, Box, TextField, CircularProgress, Alert } from '@mui/material';
+import { handleApiError } from '../../../utils/errorHandler';
 
-export const PasswordResetRequestForm = () => {
-  const [email, setEmail] = useState('');
-  const [success, setSuccess] = useState(false);
+export const RequestPasswordResetForm = () => {
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
+  const { register, handleSubmit, formState: { errors } } = useForm<RequestPasswordResetDto>({
+    resolver: zodResolver(RequestPasswordResetSchema)
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+  const onSubmit = async (data: RequestPasswordResetDto) => {
     try {
-      RequestPasswordResetSchema.parse({ email });
-      const data: RequestPasswordResetDto = { email };
-      await authApi.requestPasswordReset(data);
-      setSuccess(true);
-      // onSubmit(data);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        setError(error.errors[0].message);
-      } else {
-        setError('Failed to send reset instructions. Please try again');
-      }
-      setSuccess(false);
+      setIsLoading(true);
+      const response = await authApi.requestPasswordReset(data);
+      // show success message/redirect
+      setSuccess(response?.data?.message);
+      setTimeout(() => navigate('/login'), 3000);
+    } catch (err) {
+      // handle error
+      const error = handleApiError(err);
+      setError(error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
+    <Container maxWidth="sm">
+      <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{
+        mt: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3
+      }} 
+      >
 
-    <Container maxWidth='sm'>
-      <Box sx={{ mt: 8 }}>
-        {/* <Typography variant='h4' component='h1' gutterBottom>Reset Password</Typography> */}
-
-        {isLoading && <LinearProgress sx={{ my: 2 }} />}
-
-        {success ? (
-          <Alert severity='success' sx={{ my: 3 }}>
-            Instructions sent to {email}. Check your email and follow the link.
+        {error && (
+          <Alert severity="error" sx={{ width: '100%' }}>
+            {error}
           </Alert>
-        ) : (
-          <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3, gap: 2 }}>
-            <TextField
-              fullWidth
-              label='Email'
-              variant='outlined'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              type='email'
-              sx={{
-                '& .MuiInputLabel-root': { mb: 1 },
-                '& .MuiOutlinedInput-root': { mt: 1 },
-                '& .MuiInputBase-input': { color: '#1a202c' },
-              }}
+        )}
+
+        {success && (
+          <Alert severity="success" sx={{ width: '100%' }}>
+            {success}
+          </Alert>
+        )}
+
+        <TextField 
+            fullWidth
+            label="Email"
+            error={!!errors.email}
+            helperText={errors.email?.message}
+            {...register('email')}
+            variant='outlined'
+            sx={{
+              '& .MuiInputLabel-root': {
+                mb: 1,
+                color: '#111827',
+                fontWeight: 600,
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#6b7280', // Gray birder for visibility
+                  borderWidth: '1.5px'
+                },
+                '&:hover fieldset': {
+                  borderColor: '#374151', // Darker gray on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#1976d2', // primary color
+                  boxShadow: '0 0 0 3px rgba(25, 118, 210, 0.1)', // Subtle glow
+                },
+                backgroundColor: '#f3f4f6', // Light gray background
+                borderRadius: '8px',
+                transition: 'all 0.2s ease-in-out',
+              },
+              '& .MuiInputBase-input': {
+                color: '#111827', // Darker text color
+                padding: '14px 16px', // Better padding
+                '&::placeholder': {
+                  color: '#6b7280', // Gray placeholder
+                  opacity: 1,
+                },
+              },
+              '& .MuiFormHelperText-root': {
+                color: '#6b7280', // Helper text color
+                fontSize: '0.875rem', // Smaller font
+                marginLeft: 0,
+                mt: 1,
+              },
+            }}
           />
 
-          {error && (
-            <Alert severity='error' sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
-
-          <Button 
-            type='submit'
-            variant='contained'
+          <Button
+            type="submit"
+            disabled={isLoading}
+            variant="contained"
             fullWidth
             size='large'
-            sx={{ py: 1.5, mt: 2 }}
+            sx={{ mt: 2, py: 1.5, position: 'relative' }}
           >
-            Send Reset Link
+            {isLoading && (
+              <Box sx={{ position: 'absolute', color: 'primary.light' }}>
+                <CircularProgress size={24} />
+                <span style={{ visibility: 'hidden' }}>
+                  Send Instructions
+                </span>
+              </Box>
+            )}
+            {!isLoading && 'Send Reset Instructions'}
           </Button>
-        </Box>
-      )}
-
-      <Box sx={{ textAlign: 'center', mt: 3 }}>
-        <Link to="/login">
-          Back to Login
-        </Link>
-      </Box>
       </Box>
     </Container>
   );
-};
+}

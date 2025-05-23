@@ -6,8 +6,9 @@ import DashboardPage from './features/dashboard/pages/DashboardPage';
 import { Navbar } from './components/NavBar';
 import { VerifyEmailPage } from './features/auth/pages/VerifyEmailPage';
 import { PasswordResetRequestPage } from './features/auth/pages/RequestPasswordResetPage';
-import { ResetPasswordPage } from './features/auth/pages/ResetPasswordPage';
+import ResetPasswordPage from './features/auth/pages/ResetPasswordPage';
 import HomePage from './features/home/HomePage';
+import { ErrorNotification } from './components/NotificationAlert';
 
 function App() {
   return (
@@ -24,8 +25,8 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
 
           {/* Password Management */}
-          // Add these routes
-          <Route path="/password-reset-request" element={<PasswordResetRequestPage />} />
+          <Route path="/request-reset" element={<PasswordResetRequestPage />} />
+          <Route path="reset-password" element={<ResetPasswordPage />} />
 
           {/* Private Routes */}
           <Route element={<PrivateRoute />}>
@@ -36,6 +37,7 @@ function App() {
 
           {/* Not Found Route */}
           <Route path='*' element={<div>Not Found</div>} />
+          <Route element={<ErrorNotification />} />
         </Routes>
       </main>
     </BrowserRouter>

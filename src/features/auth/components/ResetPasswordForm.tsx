@@ -1,75 +1,72 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Alert, Button,
-  CircularProgress,
-  Container, TextField,
-  Typography, Box 
-} from '@mui/material';
-import { LoginDto } from '../../../types/auth';
-import { loginSchema } from '../../../schemas/auth';
+import { Button, CircularProgress, Container, 
+    TextField, Box, Typography } from '@mui/material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authApi } from '../../../api/auth';
 import { handleApiError } from '../../../utils/errorHandler';
-import { useAuth } from '../../../hooks/useAuth';
-import { Link, useNavigate } from 'react-router-dom';
+import { ResetPasswordDto } from '../../../types/auth';
+import { resetPasswordSchema } from '../../../schemas/auth';
+import { useError } from '../../../providers/ErrorProvider';
 
-export const LoginForm = () => {
-  const [error, setError] = useState('');
+interface ResetPasswordFormProps {
+  token: string
+}
+
+const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
+  const { showError } = useError();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-    const { 
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<LoginDto>({
-        resolver: zodResolver(loginSchema),
-    });
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors } 
+  } = useForm<ResetPasswordDto>({
+    resolver: zodResolver(resetPasswordSchema)
+  });
 
-    const { login } = useAuth();
-    const navigate = useNavigate();
-  
+  const onSubmit = async (data: ResetPasswordDto) => {
+    if (!token) {
+      showError('Invalid reset link');
+      return;
+    }
 
-    const onSubmit = async (data: LoginDto) => {
-      try {
-        setIsLoading(true);
-        const response = await authApi.login(data);
-        await login(response.data);
-        navigate('/dashboard')
-      } catch (err) {
-        const error = handleApiError(err);
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    try {
+      setIsLoading(true);
+      await authApi.resetPassword({ ...data, token });
+      navigate('/login', { state: { success: 'Password reset successfully' } });
+    } catch (err) {
+      const error = handleApiError(err);
+      showError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    return (
-      <Container maxWidth="sm">
+  return (
+    <Container maxWidth="sm">
+      <Box 
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{
+          mt: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3
+        }}>
+          <Typography variant='h4' component="h1" gutterBottom>
+            Reset Password
+          </Typography>
 
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{
-            mt: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 3
-          }}
-        >
-
-          {error && (
-            <Alert severity="error" sx={{width: '100%'}}>
-              {error}
-            </Alert>
-          )}
-
-          <TextField 
+          <TextField
             fullWidth
-            label="Email"
-            error={!!errors.email}
-            helperText={errors.email?.message}
-            {...register('email')}
+            type='password'
+            label='New Password'
+            error={!!errors.newPassword}
+            helperText={errors.newPassword?.message}
+            {...register('newPassword')}
             variant='outlined'
             sx={{
               '& .MuiInputLabel-root': {
@@ -112,11 +109,11 @@ export const LoginForm = () => {
 
           <TextField 
             fullWidth
-            type="password"
-            label="Password"
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            {...register('password')}
+            type='password'
+            label='Confirm Password'
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
+            {...register('confirmPassword')}
             variant='outlined'
             sx={{
               '& .MuiInputLabel-root': {
@@ -158,31 +155,32 @@ export const LoginForm = () => {
           />
 
           <Button
-            type="submit"
+            type='submit'
             disabled={isLoading}
-            variant="contained"
+            variant='contained'
             fullWidth
             size='large'
-            sx={{ mt: 2, py: 1.5 }}
+            sx={{ mt: 2, py: 1.5, position: 'relative' }}
           >
             {isLoading && (
-              <Box sx={{ position: 'absolute', color: 'primary.light' }}>
-                <CircularProgress size={24} />
+              <Box sx={{
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%'
+              }}>
+                <CircularProgress size={24} color='inherit' />
                 <span style={{ visibility: 'hidden' }}>
-                  Sign In
-                </span>
+                  Reset Password
+                </span>                
               </Box>
             )}
-            {!isLoading && 'Sign In'}
+            {!isLoading && 'Reset Password'}
           </Button>
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <Typography variant='body2'>
-              <Link to="/request-reset" style={{ textDecoration: 'none', color: '#1976d2' }}>
-                Forgot Password?
-              </Link>
-            </Typography>
-          </Box>
         </Box>
-      </Container>
-    );
+    </Container>
+  );
 };
+
+export default ResetPasswordForm;

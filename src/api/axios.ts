@@ -1,6 +1,7 @@
 import axios from "axios";
 import { authApi } from "./auth";
 import { useAuth } from "../hooks/useAuth";
+import { handleApiError } from "../utils/errorHandler";
 
 // Create an Axios instance with default settings
 export const api = axios.create({
@@ -24,6 +25,14 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    // Handle network errors
+    if (!error.response) {
+      error.response = {
+        data: {message: 'Network error - unable to reach server'},
+        status: 503
+      };
+    }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -55,6 +64,10 @@ api.interceptors.response.use(
         isRefreshing = false;
       }
     }
+
+    // Generic error handling
+    const errorMessage = handleApiError(error);
+    error.response.data.message = errorMessage;
 
     return Promise.reject(error);
   }

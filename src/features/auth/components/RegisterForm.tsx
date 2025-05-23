@@ -1,12 +1,12 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Button, CircularProgress, Container, TextField, Typography, Box } from '@mui/material';
+import { Alert, Button, CircularProgress, Container, TextField, Box } from '@mui/material';
 import { RegisterDto } from '../../../types/auth';
 import { registerSchema } from '../../../schemas/auth';
 import { useState } from 'react';
-import { AxiosError } from 'axios';
 import { useAuth } from '../../../hooks/useAuth'; 
 import { useNavigate } from 'react-router-dom';
+import { handleApiError } from '../../../utils/errorHandler';
 
 export const RegisterForm = () => {
   const [error, setError] = useState('');
@@ -29,8 +29,8 @@ export const RegisterForm = () => {
         await registerContext(data);
         navigate('/login');        // TODO: store token and redirect
       } catch (err) {
-        const error = err as AxiosError
-        setError(error.response?.statusText || 'Registration failed')
+        const error = handleApiError(err);
+        setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -48,9 +48,6 @@ export const RegisterForm = () => {
             gap: 3
           }}
         >
-          <Typography variant="h4" component="h1" gutterBottom>
-            Create Account
-          </Typography>
 
           {error && (
             <Alert severity='error' sx={{ width: '100%' }}>
@@ -66,9 +63,41 @@ export const RegisterForm = () => {
             {...register('email')}
             variant='outlined'
             sx={{
-              '& .MuiInputLabel-root': { mb: 1 },
-              '& .MuiOutlinedInput-root': { mt: 1 },
-              '& .MuiInputBase-input': { color: '#1a202c' },
+              '& .MuiInputLabel-root': {
+                mb: 1,
+                color: '#111827',
+                fontWeight: 600,
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#6b7280', // Gray birder for visibility
+                  borderWidth: '1.5px'
+                },
+                '&:hover fieldset': {
+                  borderColor: '#374151', // Darker gray on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#1976d2', // primary color
+                  boxShadow: '0 0 0 3px rgba(25, 118, 210, 0.1)', // Subtle glow
+                },
+                backgroundColor: '#f3f4f6', // Light gray background
+                borderRadius: '8px',
+                transition: 'all 0.2s ease-in-out',
+              },
+              '& .MuiInputBase-input': {
+                color: '#111827', // Darker text color
+                padding: '14px 16px', // Better padding
+                '&::placeholder': {
+                  color: '#6b7280', // Gray placeholder
+                  opacity: 1,
+                },
+              },
+              '& .MuiFormHelperText-root': {
+                color: '#6b7280', // Helper text color
+                fontSize: '0.875rem', // Smaller font
+                marginLeft: 0,
+                mt: 1,
+              },
             }}
           />
 
@@ -81,9 +110,41 @@ export const RegisterForm = () => {
             {...register('name')}
             variant='outlined'
             sx={{
-              '& .MuiInputLabel-root': { mb: 1 },
-              '& .MuiOutlinedInput-root': { mt: 1 },
-              '& .MuiInputBase-input': { color: '#1a202c' },
+              '& .MuiInputLabel-root': {
+                mb: 1,
+                color: '#111827',
+                fontWeight: 600,
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#6b7280', // Gray birder for visibility
+                  borderWidth: '1.5px'
+                },
+                '&:hover fieldset': {
+                  borderColor: '#374151', // Darker gray on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#1976d2', // primary color
+                  boxShadow: '0 0 0 3px rgba(25, 118, 210, 0.1)', // Subtle glow
+                },
+                backgroundColor: '#f3f4f6', // Light gray background
+                borderRadius: '8px',
+                transition: 'all 0.2s ease-in-out',
+              },
+              '& .MuiInputBase-input': {
+                color: '#111827', // Darker text color
+                padding: '14px 16px', // Better padding
+                '&::placeholder': {
+                  color: '#6b7280', // Gray placeholder
+                  opacity: 1,
+                },
+              },
+              '& .MuiFormHelperText-root': {
+                color: '#6b7280', // Helper text color
+                fontSize: '0.875rem', // Smaller font
+                marginLeft: 0,
+                mt: 1,
+              },
             }}
           />
 
@@ -96,9 +157,41 @@ export const RegisterForm = () => {
             {...register('password')}
             variant='outlined'
             sx={{
-              '& .MuiInputLabel-root': { mb: 1 },
-              '& .MuiOutlinedInput-root': { mt: 1 },
-              '& .MuiInputBase-input': { color: '#1a202c' },
+              '& .MuiInputLabel-root': {
+                mb: 1,
+                color: '#111827',
+                fontWeight: 600,
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#6b7280', // Gray birder for visibility
+                  borderWidth: '1.5px'
+                },
+                '&:hover fieldset': {
+                  borderColor: '#374151', // Darker gray on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#1976d2', // primary color
+                  boxShadow: '0 0 0 3px rgba(25, 118, 210, 0.1)', // Subtle glow
+                },
+                backgroundColor: '#f3f4f6', // Light gray background
+                borderRadius: '8px',
+                transition: 'all 0.2s ease-in-out',
+              },
+              '& .MuiInputBase-input': {
+                color: '#111827', // Darker text color
+                padding: '14px 16px', // Better padding
+                '&::placeholder': {
+                  color: '#6b7280', // Gray placeholder
+                  opacity: 1,
+                },
+              },
+              '& .MuiFormHelperText-root': {
+                color: '#6b7280', // Helper text color
+                fontSize: '0.875rem', // Smaller font
+                marginLeft: 0,
+                mt: 1,
+              },
             }}
           />
 

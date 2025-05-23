@@ -31,9 +31,9 @@ export interface VerifyEmailDto {
 };
 
 export interface ResetPasswordDto {
-  token: string;
   newPassword: string;
   confirmPassword: string;
+  token: string;
 };
 
 export interface RequestPasswordResetDto {
