@@ -1,21 +1,21 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, CircularProgress, Container, 
-    TextField, Box, Typography } from '@mui/material';
-import { useState } from 'react';
+    TextField, Box, Typography, Alert } from '@mui/material';
+import { useState, } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authApi } from '../../../api/auth';
 import { handleApiError } from '../../../utils/errorHandler';
 import { ResetPasswordDto } from '../../../types/auth';
-import { resetPasswordSchema } from '../../../schemas/auth';
-import { useError } from '../../../providers/ErrorProvider';
+import { resetPasswordFormSchema, ResetPasswordFormValues } from '../../../schemas/auth';
 
 interface ResetPasswordFormProps {
-  token: string
+  token: string;
 }
 
 const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
-  const { showError } = useError();
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -23,23 +23,29 @@ const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
     register, 
     handleSubmit, 
     formState: { errors } 
-  } = useForm<ResetPasswordDto>({
-    resolver: zodResolver(resetPasswordSchema)
+  } = useForm<ResetPasswordFormValues>({
+    resolver: zodResolver(resetPasswordFormSchema)
   });
 
   const onSubmit = async (data: ResetPasswordDto) => {
     if (!token) {
-      showError('Invalid reset link');
+      setError('Invalid reset link');
       return;
     }
 
+    const payload = {
+      newPassword: data.newPassword,
+      token
+    };
+
     try {
       setIsLoading(true);
-      await authApi.resetPassword({ ...data, token });
-      navigate('/login', { state: { success: 'Password reset successfully' } });
+      const response = await authApi.resetPassword(payload);
+      setSuccess(response?.data?.message);
+      setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
       const error = handleApiError(err);
-      showError(error);
+      setError(error);
     } finally {
       setIsLoading(false);
     }
@@ -59,6 +65,18 @@ const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
           <Typography variant='h4' component="h1" gutterBottom>
             Reset Password
           </Typography>
+
+          {error && (
+          <Alert severity="error" sx={{ width: '100%' }}>
+            {error}
+          </Alert>
+          )}
+
+          {success && (
+            <Alert severity="success" sx={{ width: '100%' }}>
+              {success}
+            </Alert>
+          )}
 
           <TextField
             fullWidth

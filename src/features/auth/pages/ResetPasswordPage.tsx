@@ -4,9 +4,11 @@ import { Box, Container, Typography } from '@mui/material';
 
 const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
+  console.log('searchParams:', searchParams);
   const token = searchParams.get('token');
+  console.log('Token:', token)
   if (!token) {
-    return;
+    return null;
   }
 
   return (
