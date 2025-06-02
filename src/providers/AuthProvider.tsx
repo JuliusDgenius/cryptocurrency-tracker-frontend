@@ -42,6 +42,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return data;
   };
 
+  const logout = async () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setUser(null);
+  };
+
   const handle2FASetup = async (token: string) => {
     try {
       await authApi.verify2FA(token);
@@ -94,11 +100,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       checkAuth();
   }, []);
 
-  const logout = async () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    setUser(null);
-  };
+  // useEffect for logout event synchronization
+  useEffect(() => {
+    const handleLogoutEvent = () => {
+      console.log('Received authLogout event from interceptor');
+      logout();
+    };
+    
+    window.addEventListener('authLogout', handleLogoutEvent);
+    
+    return () => {
+      window.removeEventListener('authLogout', handleLogoutEvent);
+    };
+  }, [logout]);
 
   return (
     <AuthContext.Provider value={{

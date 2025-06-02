@@ -2,44 +2,47 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { LoginPage } from './features/auth/pages/LoginPage';
 import { RegisterPage } from './features/auth/pages/RegisterPage';
 import { PrivateRoute } from './components/PrivateRoute';
-import DashboardPage from './features/dashboard/pages/DashboardPage';
+import DashboardPageHome from './features/dashboard/pages/DashboardHome';
 import { Navbar } from './components/NavBar';
 import { VerifyEmailPage } from './features/auth/pages/VerifyEmailPage';
 import { PasswordResetRequestPage } from './features/auth/pages/RequestPasswordResetPage';
 import ResetPasswordPage from './features/auth/pages/ResetPasswordPage';
 import HomePage from './features/home/HomePage';
-import { ErrorNotification } from './components/NotificationAlert';
+import { ErrorNotification } from './components/ErrorNotification';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import PortfolioDashboard from './features/dashboard/pages/PortfolioDashboard';
+import DemoDashboard from './features/dashboard/pages/DemoDashboard';
+import SettingsPage from './features/settings/pages/SettingsPage';
 
 function App() {
   return (
     <BrowserRouter>
-      {/* Navbar */}
-      <Navbar /> 
-      <main className='container mx-auto p-4'>
-        <Routes>
-          {/* Home Page */}
-          <Route index path='/' element={<HomePage />} />
-          
-          {/* Authentication Routes */}
-          <Route path="/login" element={<LoginPage />} />
+      <ErrorBoundary /> {/* Catch React component errors */}
+        {/* Global components */}
+        <Navbar /> 
+        <ErrorNotification /> {/* Catch API/network errors */}
+        <main className='container mx-auto p-4'>
+          <Routes>
+            {/* Public Routes */}
+            <Route index path='/' element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/request-reset" element={<PasswordResetRequestPage />} />
+            <Route path="reset-password" element={<ResetPasswordPage />} />
 
-          {/* Password Management */}
-          <Route path="/request-reset" element={<PasswordResetRequestPage />} />
-          <Route path="reset-password" element={<ResetPasswordPage />} />
+            <Route path="/demo" element={<DemoDashboard />} /> 
 
-          {/* Private Routes */}
-          <Route element={<PrivateRoute />}>
-            <Route path='/dashboard' element={<DashboardPage />} />
-            <Route path="/verify-email" element={<VerifyEmailPage />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-          </Route>
-
-          {/* Not Found Route */}
-          <Route path='*' element={<div>Not Found</div>} />
-          <Route element={<ErrorNotification />} />
-        </Routes>
-      </main>
+            {/* Private Routes */}
+            <Route element={<PrivateRoute />}>
+              <Route path='/dashboard' element={<DashboardPageHome />} />
+              <Route path='/portfolio/:portfolio' element={<PortfolioDashboard />} />
+              <Route path='settings' element={<SettingsPage />} />
+              <Route path="/verify-email" element={<VerifyEmailPage />} />
+            </Route>
+            {/* Not Found Route */}
+            <Route path='*' element={<div>Not Found</div>} />
+          </Routes>
+        </main>
     </BrowserRouter>
   );
 }

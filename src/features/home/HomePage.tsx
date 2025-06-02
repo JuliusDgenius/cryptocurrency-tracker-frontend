@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Button, Container, Box, Typography, Grid, Card,
-    CardContent, useTheme, IconButton, Link
+    CardContent, useTheme as muiUseTheme, IconButton, Link as MuiLink
 } from '@mui/material';
 import { BarChart, Lock, AccountBalanceWallet, ListAlt,
     ArrowRightAlt, Twitter, Telegram, LinkedIn,
  } from '@mui/icons-material';
- import { keyframes } from '@emotion/react';
+import { keyframes } from '@emotion/react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
-//  Animation for floating crypto icons
+// Animation for floating crypto icons
 const float = keyframes`
   0% { transform: translateY(0px); }
   50% { transform: translateY(-20px); }
@@ -15,7 +17,8 @@ const float = keyframes`
 `;
 
 const HomePage = () => {
-    const theme = useTheme();
+    const theme = muiUseTheme();
+    const { user } = useAuth();
     const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
 
     const features = [
@@ -103,30 +106,52 @@ const HomePage = () => {
                 </Typography>
 
                 <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center', zIndex: 1 }}>
-                  <Button 
-                    variant="contained" 
-                    size="large"
-                    endIcon={<ArrowRightAlt />}
-                    href="/register"
-                  >
-                    Get Started Free
-                  </Button>
-                  <Button 
-                    variant="outlined" 
-                    size="large"
-                    href="/demo"
+                  {user ? (
+                    <Button
+                      variant='contained'
+                      size='large'
+                      endIcon={<ArrowRightAlt />}
+                      component={Link}
+                      to='/dashboard'
                     >
-                    Live Demo
-                  </Button>
+                      Go to Dashboard
+                    </Button>
+                  ) : (
+                    <>
+                      <Button 
+                        variant="contained" 
+                        size="large"
+                        endIcon={<ArrowRightAlt />}
+                        component={Link}
+                        to="/register"
+                      >
+                        Get Started Free
+                      </Button>
+                      <Button 
+                        variant="outlined" 
+                        size="large"
+                        component={Link}
+                        to="/demo"
+                      >
+                        Live Demo
+                      </Button>    
+                    </>
+                  )}
                 </Box>
               </Box>
             </Container>
       
             {/* Features Grid */}
-            <Container maxWidth="lg">
-              <Grid container spacing={6} sx={{ py: 10 }}>
+            <Container maxWidth="lg" id='features'>
+              <Typography variant='h3' align='center' sx={{ mb: 2 }}>
+                  Powerful Portfolio Management
+              </Typography>
+              <Typography variant='subtitle1' align='center' color='text.secondary' sx={{ mb: 6 }}>
+                  Everything you need to manage your crypto investments
+              </Typography>
+              <Grid container spacing={6} sx={{ py: 4 }}>
                 {features.map((feature, index) => (
-                  <Grid xs={12} md={6} key={index}>
+                  <Grid item xs={12} md={6} key={index}>
                     <Card 
                       onMouseEnter={() => setHoveredFeature(index)}
                       onMouseLeave={() => setHoveredFeature(null)}
@@ -163,19 +188,19 @@ const HomePage = () => {
               }}>
                 <Container maxWidth="lg">
                   <Grid container spacing={8} justifyContent="center">
-                    <Grid xs={6} sm={3}>
+                    <Grid item xs={6} sm={3}>
                       <Typography variant="h3" align="center" color="primary.main">
                         10K+
                       </Typography>
                       <Typography align="center">Active Users</Typography>
                     </Grid>
-                    <Grid xs={6} sm={3}>
+                    <Grid item xs={6} sm={3}>
                       <Typography variant="h3" align="center" color="primary.main">
                         $500M+
                       </Typography>
                       <Typography align="center">Assets Tracked</Typography>
                     </Grid>
-                    <Grid xs={6} sm={3}>
+                    <Grid item xs={6} sm={3}>
                       <Typography variant="h3" align="center" color="primary.main">
                         50+
                       </Typography>
@@ -193,7 +218,7 @@ const HomePage = () => {
               }}>
                 <Container maxWidth="lg">
                   <Grid container spacing={8}>
-                    <Grid xs={12} md={6}>
+                    <Grid item xs={12} md={6}>
                       <Typography variant="h6" gutterBottom>
                         CryptoFolio
                       </Typography>
@@ -202,18 +227,18 @@ const HomePage = () => {
                       </Typography>
                     </Grid>
 
-                    <Grid xs={6} md={3}>
+                    <Grid item xs={6} md={3}>
                       <Typography variant="subtitle1" gutterBottom>
                         Legal
                       </Typography>
                       <Box display="flex" flexDirection="column">
-                        <Link href="/privacy" color="text.secondary">Privacy Policy</Link>
-                        <Link href="/terms" color="text.secondary">Terms of Service</Link>
-                        <Link href="/cookies" color="text.secondary">Cookie Policy</Link>
+                        <MuiLink href="/privacy" color="text.secondary">Privacy Policy</MuiLink>
+                        <MuiLink href="/terms" color="text.secondary">Terms of Service</MuiLink>
+                        <MuiLink href="/cookies" color="text.secondary">Cookie Policy</MuiLink>
                       </Box>
                     </Grid>
 
-                    <Grid xs={6} md={3}>
+                    <Grid item xs={6} md={3}>
                       <Typography variant="subtitle1" gutterBottom>
                         Connect
                       </Typography>

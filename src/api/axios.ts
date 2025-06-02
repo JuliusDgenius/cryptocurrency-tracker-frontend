@@ -1,5 +1,6 @@
 import axios from "axios";
 import { authApi } from "./auth";
+import { getGlobalShowError } from './errorHandlerRef';
 import { useAuth } from "../hooks/useAuth";
 import { handleApiError } from "../utils/errorHandler";
 
@@ -12,7 +13,10 @@ export const api = axios.create({
 // Add request interceptors for auth headers
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('accessToken');
-  if (token) {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (config.url?.includes('/auth/refresh') && refreshToken) {
+    config.headers.Authorization = `Bearer ${refreshToken}`;
+  } else if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -21,6 +25,7 @@ api.interceptors.request.use((config) => {
 let isRefreshing = false;
 let failedRequests: any[] = [];
 
+// Response interceptors
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -57,6 +62,9 @@ api.interceptors.response.use(
         failedRequests = [];
         return api(originalRequest);
       } catch (refreshError) {
+        // Get global error display function
+        getGlobalShowError()?.('Session expired. Please login again');
+
         useAuth().logout();
         window.location.href = '/login';
         return Promise.reject(refreshError)
@@ -68,6 +76,12 @@ api.interceptors.response.use(
     // Generic error handling
     const errorMessage = handleApiError(error);
     error.response.data.message = errorMessage;
+
+    // show error using global handling
+    const showError = getGlobalShowError();
+    if (showError) {
+      showError(errorMessage);
+    }
 
     return Promise.reject(error);
   }
