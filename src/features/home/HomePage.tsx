@@ -151,7 +151,7 @@ const HomePage = () => {
               </Typography>
               <Grid container spacing={6} sx={{ py: 4 }}>
                 {features.map((feature, index) => (
-                  <Grid item xs={12} md={6} key={index}>
+                  <Grid xs={12} md={6} key={index}>
                     <Card 
                       onMouseEnter={() => setHoveredFeature(index)}
                       onMouseLeave={() => setHoveredFeature(null)}
@@ -188,13 +188,13 @@ const HomePage = () => {
               }}>
                 <Container maxWidth="lg">
                   <Grid container spacing={8} justifyContent="center">
-                    <Grid item xs={6} sm={3}>
+                    <Grid xs={6} sm={3}>
                       <Typography variant="h3" align="center" color="primary.main">
                         10K+
                       </Typography>
                       <Typography align="center">Active Users</Typography>
                     </Grid>
-                    <Grid item xs={6} sm={3}>
+                    <Grid xs={6} sm={3}>
                       <Typography variant="h3" align="center" color="primary.main">
                         $500M+
                       </Typography>
@@ -218,16 +218,17 @@ const HomePage = () => {
               }}>
                 <Container maxWidth="lg">
                   <Grid container spacing={8}>
-                    <Grid item xs={12} md={6}>
+                    <Grid xs={12} md={6}>
                       <Typography variant="h6" gutterBottom>
-                        CryptoFolio
+                        <Box component="span" sx={{ color: '#22d3ee' }}>Crypto</Box>Folio
+                        {/* CryptoFolio */}
                       </Typography>
                       <Typography color="text.secondary">
                         Empowering investors with comprehensive crypto portfolio management since 2024
                       </Typography>
                     </Grid>
 
-                    <Grid item xs={6} md={3}>
+                    <Grid xs={6} md={3}>
                       <Typography variant="subtitle1" gutterBottom>
                         Legal
                       </Typography>
@@ -238,7 +239,7 @@ const HomePage = () => {
                       </Box>
                     </Grid>
 
-                    <Grid item xs={6} md={3}>
+                    <Grid xs={6} md={3}>
                       <Typography variant="subtitle1" gutterBottom>
                         Connect
                       </Typography>

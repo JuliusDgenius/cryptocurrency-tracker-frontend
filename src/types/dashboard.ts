@@ -13,6 +13,7 @@ export interface Portfolio {
     month: number;
     year: number;
     allTime: number;
+    twentyFourHour: number;
   };
 }
 

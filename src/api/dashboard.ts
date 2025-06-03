@@ -13,6 +13,7 @@ const dashboardService = {
   async getPortfolios(): Promise<Portfolio[]> {
     try {
       const response = await api.get('/portfolio/portfolios');
+      console.log('Porfolio:', response.data.portfolios[0])
       return response.data.portfolios;
     } catch (error) {
       throw new Error('Failed to fetch portfolios');
@@ -123,6 +124,11 @@ const dashboardService = {
     } catch (error) {
       throw new Error('Failed to generate report');
     }
+  },
+
+  async updatePortfolio(portfolioId: string, name: string, description: string): Promise<Portfolio> {
+    const response = await api.patch(`/portfolio/${portfolioId}`, { name, description });
+    return response.data;
   }
 };
 
