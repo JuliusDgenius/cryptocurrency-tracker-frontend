@@ -65,6 +65,10 @@ const DashboardHome = () => {
     }
   };
 
+  const handleUpdatePortfolio = async (updatedPortfolio: Portfolio) => {
+    setPortfolios(portfolios.map(p => p.id === updatedPortfolio.id ? updatedPortfolio : p));
+  };
+
   if (loading) {
     return (
       <Box sx={{ 
@@ -143,6 +147,7 @@ const DashboardHome = () => {
             onCreateNew={() => setOpenCreateDialog(true)}
             onDelete={handleDeletePortfolio}
             onSetPrimary={handleSetPrimary}
+            onUpdate={handleUpdatePortfolio}
           />
         </>
       )}
