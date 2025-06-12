@@ -19,24 +19,28 @@ export interface Portfolio {
 
 export interface PortfolioSummaryData {
   totalValue: number;
-  twentyFourHourChange: number;
   profitLoss: {
     day: number;
     week: number;
     month: number;
     year: number;
     allTime: number;
+    twentyFourHour: number;
   };
-  topPerformers: {
+  assetAllocation: {
     symbol: string;
-    name: string;
-    change: number;
+    percentage: number;
+    value: number;
   }[];
-  worstPerformers: {
-    symbol: string;
-    name: string;
+  performance: {
     change: number;
-  }[];
+    percentageChange: number;
+    historicalData: {
+      date: string;
+      value: number;
+      benchmark?: number;
+    }[];
+  };
 }
 
 export interface AssetDistributionData {
@@ -70,11 +74,12 @@ export interface RecentActivityData {
 export interface PortfolioHealthMetrics {
   diversificationScore: number;
   volatility: number;
-  sharpeRatio: number;
-  sortinoRatio: number;
+  riskAdjustedReturns: {
+    sharpeRatio: number;
+    sortinoRatio: number;
+  };
   maxDrawdown: number;
   valueAtRisk: number;
-  beta: number;
 }
 
 export interface RiskAnalysisData {

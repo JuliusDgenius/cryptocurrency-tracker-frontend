@@ -1,21 +1,94 @@
-import { Box, Typography, useTheme } from '@mui/material';
-import type { Transaction } from '../../../types/dashboard';
+import { useEffect, useState } from 'react';
+import { Box, Typography, useTheme, CircularProgress } from '@mui/material';
+import type { RecentActivityData } from '@/types/dashboard';
+import dashboardService from '../../../api/dashboard';
 
 interface RecentActivityProps {
-  transactions: Transaction[];
+  portfolioId?: string;
+  demoMode?: boolean;
+  transactions?: RecentActivityData[];
 }
 
-export default function RecentActivity({ transactions }: RecentActivityProps) {
+export default function RecentActivity({ 
+  portfolioId, 
+  demoMode = false,
+  transactions: initialTransactions = []
+}: RecentActivityProps) {
   const theme = useTheme();
+  const [transactions, setTransactions] = useState<RecentActivityData[]>(initialTransactions);
+  const [isLoading, setIsLoading] = useState(!demoMode);
+  const [error, setError] = useState<string | null>(null);
 
-  const getTypeColor = (type: Transaction['type']) => {
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (demoMode || !portfolioId) return;
+      
+      try {
+        setIsLoading(true);
+        const data = await dashboardService.getRecentActivity(portfolioId);
+        setTransactions(data);
+      } catch (err) {
+        console.error('Failed to fetch transactions:', err);
+        setError('Failed to load recent activity');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTransactions();
+  }, [portfolioId, demoMode]);
+
+  const getTypeColor = (type: RecentActivityData['type']) => {
     switch (type) {
-      case 'Buy': return theme.palette.success.main;
-      case 'Sell': return theme.palette.error.main;
-      case 'Receive': return theme.palette.info.main;
-      default: return theme.palette.grey[500];
+      case 'BUY': return theme.palette.success.main;
+      case 'SELL': return theme.palette.error.main;
+      case 'TRANSFER': return theme.palette.info.main;
+      case 'STAKING': return theme.palette.warning.main;
+      case 'DIVIDEND': return theme.palette.success.light;
+      default: return theme.palette.warning.main;
     }
   };
+
+  const formatType = (type: RecentActivityData['type']) => {
+    switch (type) {
+      case 'BUY': return 'Buy';
+      case 'SELL': return 'Sell';
+      case 'TRANSFER': return 'Transfer';
+      case 'STAKING': return 'Staking';
+      case 'DIVIDEND': return 'Dividend';
+      default: return type;
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Box sx={{
+        bgcolor: 'background.paper',
+        borderRadius: 4,
+        p: 4,
+        boxShadow: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '200px'
+      }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{
+        bgcolor: 'background.paper',
+        borderRadius: 4,
+        p: 4,
+        boxShadow: 1
+      }}>
+        <Typography color="error">{error}</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{
@@ -26,9 +99,9 @@ export default function RecentActivity({ transactions }: RecentActivityProps) {
     }}>
       <Typography variant="h6" gutterBottom>Recent Activity</Typography>
       <Box sx={{ '& > *:not(:last-child)': { mb: 2 } }}>
-        {transactions.map((txn, index) => (
+        {transactions.map((txn) => (
           <Box 
-            key={index}
+            key={txn.id}
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -46,19 +119,21 @@ export default function RecentActivity({ transactions }: RecentActivityProps) {
                 bgcolor: getTypeColor(txn.type)
               }} />
               <Box>
-                <Typography variant="body1" fontWeight="medium">{txn.type}</Typography>
+                <Typography variant="body1" fontWeight="medium">
+                  {formatType(txn.type)} {txn.asset}
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {new Date(txn.date).toLocaleDateString()}
+                  {new Date(txn.timestamp).toLocaleDateString()}
                 </Typography>
               </Box>
             </Box>
             
             <Box>
               <Typography variant="body1" fontWeight="medium" textAlign="right">
-                {txn.amount} {txn.asset}
+                {txn.amount} {txn.symbol}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                ${txn.value.toLocaleString()}
+                ${txn.price.toLocaleString()}
               </Typography>
             </Box>
           </Box>

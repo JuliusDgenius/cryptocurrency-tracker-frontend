@@ -22,8 +22,8 @@ const dashboardService = {
 
   async getPortfolioDetails(portfolioId: string): Promise<Portfolio> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/details`);
-      return response.data;
+      const response = await api.get(`/portfolio/${portfolioId}`);
+      return response.data.portfolio;
     } catch (error) {
       throw new Error('Failed to fetch portfolio details');
     }
@@ -48,17 +48,35 @@ const dashboardService = {
 
   async getPortfolioSummary(portfolioId: string, timeframe: string): Promise<PortfolioSummaryData> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/summary?timeframe=${timeframe}`);
-      return response.data;
-    } catch (error) {
-      throw new Error('Failed to fetch portfolio summary');
+      console.log(`Fetching portfolio summary for portfolio ${portfolioId} with timeframe ${timeframe}`);
+      const response = await api.get(`/portfolio/${portfolioId}/metrics`, {
+        params: { timeframe }
+      });
+      console.log('Portfolio summary response:', response.data);
+      if (!response.data) {
+        throw new Error('No data received from portfolio metrics endpoint');
+      }
+      return {
+        totalValue: response.data.totalValue,
+        profitLoss: response.data.profitLoss,
+        assetAllocation: response.data.assetAllocation,
+        performance: response.data.performance
+      };
+    } catch (error: any) {
+      console.error('Error fetching portfolio summary:', error);
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+        throw new Error(`Failed to fetch portfolio summary: ${error.response.data.message || 'Unknown error'}`);
+      }
+      throw new Error('Failed to fetch portfolio summary: Network error');
     }
   },
 
   async getAssetDistribution(portfolioId: string): Promise<AssetDistributionData[]> {
     try {
       const response = await api.get(`/portfolio/${portfolioId}/assets`);
-      return response.data.assets;
+      console.log('Assets response:', response.data)
+      return response.data;
     } catch (error) {
       throw new Error('Failed to fetch asset distribution');
     }
@@ -66,8 +84,24 @@ const dashboardService = {
 
   async getRecentActivity(portfolioId: string): Promise<RecentActivityData[]> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/recent-activity`);
-      return response.data.transactions;
+      const response = await api.get(`/portfolio/${portfolioId}/transaction/transactions`, {
+        params: {
+          page: 1,
+          limit: 10,
+          sort: 'date:desc'
+        }
+      });
+      return response.data.transactions.map((tx: any) => ({
+        id: tx.id,
+        type: tx.type,
+        asset: tx.asset.name,
+        symbol: tx.cryptocurrency,
+        amount: tx.amount,
+        price: tx.pricePerUnit,
+        totalValue: tx.amount * tx.pricePerUnit,
+        timestamp: tx.date,
+        status: 'COMPLETED'
+      }));
     } catch (error) {
       throw new Error('Failed to fetch recent activity');
     }
@@ -94,7 +128,34 @@ const dashboardService = {
   async getRiskAnalysis(portfolioId: string): Promise<RiskAnalysisData> {
     try {
       const response = await api.get(`/portfolio/${portfolioId}/risk-analysis`);
-      return response.data;
+      const data = response.data;
+      
+      // Transform risk levels to numeric values
+      type RiskLevel = 'LOW' | 'MODERATE' | 'MODERATE_HIGH' | 'HIGH' | 'VERY_HIGH';
+      const riskLevelMap: Record<RiskLevel, number> = {
+        'LOW': 20,
+        'MODERATE': 40,
+        'MODERATE_HIGH': 60,
+        'HIGH': 80,
+        'VERY_HIGH': 100
+      };
+
+      interface StressTestResult {
+        scenario: string;
+        impact: number;
+      }
+
+      return {
+        riskLevel: data.overallRisk,
+        volatility: data.volatility * 100, // Convert to percentage
+        liquidityRisk: riskLevelMap[data.liquidityRisk as RiskLevel] || 0,
+        concentrationRisk: riskLevelMap[data.concentrationRisk as RiskLevel] || 0,
+        marketRisk: riskLevelMap[data.marketRisk as RiskLevel] || 0,
+        stressTestResults: (data.stressTestResults as StressTestResult[]).map(test => ({
+          scenario: test.scenario,
+          portfolioImpact: test.impact
+        }))
+      };
     } catch (error) {
       throw new Error('Failed to fetch risk analysis');
     }
@@ -102,8 +163,19 @@ const dashboardService = {
 
   async getCorrelationMatrix(portfolioId: string): Promise<CorrelationMatrixData> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/correlation`);
-      return response.data;
+      const response = await api.get(`/portfolio/${portfolioId}/correlation-matrix`);
+      const matrix = response.data;
+      
+      // Transform the matrix into the expected format
+      const assets = Object.keys(matrix);
+      const correlations = assets.map(asset1 => 
+        assets.map(asset2 => matrix[asset1][asset2])
+      );
+      
+      return {
+        assets,
+        correlations
+      };
     } catch (error) {
       throw new Error('Failed to fetch correlation matrix');
     }

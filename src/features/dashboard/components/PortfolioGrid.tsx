@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Card, CardContent, Typography, Box, Button, 
   Chip, IconButton, Dialog, DialogTitle, DialogContent, 
@@ -36,6 +37,7 @@ const PortfolioGrid = ({
   const [editPortfolioId, setEditPortfolioId] = useState<string | null>(null);
   const [editPortfolioName, setEditPortfolioName] = useState('');
   const [editPortfolioDesc, setEditPortfolioDesc] = useState('');
+  const navigate = useNavigate();
 
   const handleCreatePortfolio = async () => {
     if (!portfolioName.trim()) {
@@ -101,13 +103,20 @@ const PortfolioGrid = ({
       <Grid container spacing={3}>
         {portfolios.map((portfolio) => (
           <Grid key={portfolio.id} xs={12} sm={6} md={4}>
-            <Card 
+            <Card
+              onClick={() => navigate(`/portfolio/${portfolio.id}`)}
               sx={{ 
                 height: '100%', 
                 display: 'flex', 
                 flexDirection: 'column',
                 border: portfolio.isPrimary ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.12)',
-                position: 'relative'
+                position: 'relative',
+                cursor: 'pointer',
+                '&:hover': {
+                  boxShadow: 3,
+                  transform: 'translateY(-2px)',
+                  transition: 'all 0.2s ease-in-out'
+                }
               }}
             >
               {portfolio.isPrimary && (
@@ -207,7 +216,8 @@ const PortfolioGrid = ({
                   size="small" 
                   variant="outlined"
                   startIcon={<EditIcon fontSize="small" />}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setEditPortfolioId(portfolio.id);
                     setEditPortfolioName(portfolio.name);
                     setEditPortfolioDesc(portfolio.description || '');
@@ -221,7 +231,8 @@ const PortfolioGrid = ({
                   variant="outlined" 
                   color="error"
                   startIcon={<DeleteIcon fontSize="small" />}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setDeleteId(portfolio.id);
                     setOpenDelete(true);
                   }}

@@ -1,10 +1,22 @@
 import { useAuth } from "../hooks/useAuth";
-import { AppBar, Toolbar, IconButton, Typography, Button, Box } from "@mui/material";
-import { NotificationsNone, AccountCircle, Login } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { AppBar, Toolbar, IconButton, Typography, Button, Box, Menu, MenuItem, Avatar } from "@mui/material";
+import { NotificationsNone, Login, Dashboard } from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from 'react';
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <AppBar 
@@ -15,47 +27,79 @@ export const Navbar = () => {
       }}
     >
       <Toolbar>
-        {/* Left side - Notification icon */}
-        <IconButton color="inherit">
-          <NotificationsNone sx={{ color: '#22d3ee' }} />
-        </IconButton>
-
-        {/* Center - App title */}
+        {/* Left side - Logo */}
         <Typography 
           variant="h6" 
           component={Link} 
           to="/"
           sx={{ 
-            flexGrow: 1, 
             textDecoration: 'none', 
             color: 'white',
-            ml: 2 
+            mr: 3,
+            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center'
           }}
         >
-          CryptoFolio
+          <Box component="span" sx={{ color: '#22d3ee' }}>Crypto</Box>Folio
         </Typography>
+
+        {/* Dashboard link for authenticated users */}
+        {user && (
+          <Button 
+            component={Link}
+            to="/dashboard"
+            color="inherit"
+            startIcon={<Dashboard />}
+            sx={{ mr: 2 }}
+          >
+            Dashboard
+          </Button>
+        )}
+
+        {/* Center - App title */}
+        <Box sx={{ flexGrow: 1 }} />
 
         {/* Right side - Auth/Profile section */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <IconButton color="inherit">
+            <NotificationsNone sx={{ color: '#22d3ee' }} />
+          </IconButton>
+          
           {user ? (
             <>
-              <Typography variant="body1" sx={{ color: 'white' }}>
-                Hello, {user.name}
-              </Typography>
-              <IconButton color="inherit">
-                <AccountCircle sx={{ color: '#22d3ee' }} />
-              </IconButton>
-              <Button 
-                variant="contained"
-                color="secondary"
-                onClick={logout}
-                sx={{
-                  backgroundColor: '#0891b2',
-                  '&:hover': { backgroundColor: '#06b6d4' }
-                }}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <IconButton
+                  onClick={handleMenu}
+                  size="small"
+                  sx={{ ml: 2 }}
+                >
+                  <Avatar 
+                    sx={{ 
+                      width: 32, 
+                      height: 32,
+                      bgcolor: '#0891b2',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    {user.name.charAt(0)}
+                  </Avatar>
+                </IconButton>
+                <Typography variant="body1" sx={{ color: 'white' }}>
+                  {user.name}
+                </Typography>
+              </Box>
+              
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
               >
-                Logout
-              </Button>
+                <MenuItem onClick={() => navigate('/settings')}>Account Settings</MenuItem>
+                <MenuItem onClick={() => navigate('/dashboard')}>My Portfolios</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
+              </Menu>
             </>
           ) : (
             <Button

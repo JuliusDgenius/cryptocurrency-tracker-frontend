@@ -35,7 +35,7 @@ function App() {
             {/* Private Routes */}
             <Route element={<PrivateRoute />}>
               <Route path='/dashboard' element={<DashboardPageHome />} />
-              <Route path='/portfolio/:portfolio' element={<PortfolioDashboard />} />
+              <Route path='/portfolio/:portfolioId' element={<PortfolioDashboard />} />
               <Route path='settings' element={<SettingsPage />} />
               <Route path="/verify-email" element={<VerifyEmailPage />} />
             </Route>
