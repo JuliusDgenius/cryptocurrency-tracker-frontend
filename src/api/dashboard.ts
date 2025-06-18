@@ -9,6 +9,20 @@ import type {
   CorrelationMatrixData
 } from '@/types/dashboard';
 
+interface AddAssetRequest {
+  symbol: string;
+  name: string;
+  quantity: number;
+  averageBuyPrice: number;
+  currentPrice: number;
+  value: number;
+  allocation: number;
+  category?: string;
+  marketCap?: string;
+  twentyFourHourChange: number;
+  profitLossPercentage: number;
+}
+
 const dashboardService = {
   async getPortfolios(): Promise<Portfolio[]> {
     try {
@@ -201,6 +215,24 @@ const dashboardService = {
   async updatePortfolio(portfolioId: string, name: string, description: string): Promise<Portfolio> {
     const response = await api.patch(`/portfolio/${portfolioId}`, { name, description });
     return response.data;
+  },
+
+  async addAssetToPortfolio(portfolioId: string, asset: AddAssetRequest): Promise<void> {
+    const response = await api.post(`/portfolio/${portfolioId}/assets`, asset);
+    return response.data;
+  },
+
+  async getAvailableCryptos(): Promise<Array<{ symbol: string; name: string; currentPrice: number }>> {
+    const response = await api.get('/prices/available');
+    return response.data;
+  },
+
+  async deleteAsset(portfolioId: string, assetId: string): Promise<void> {
+    try {
+      await api.delete(`/portfolio/${portfolioId}/assets/${assetId}`);
+    } catch (error) {
+      throw new Error('Failed to delete asset');
+    }
   }
 };
 

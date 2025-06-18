@@ -9,9 +9,14 @@ export const authApi = {
     return api.post('/auth/register', data);
   },
   login: async (data: LoginDto) => {
+    // Store email for potential verification resend
+    localStorage.setItem('lastLoginEmail', data.email);
     return api.post<Token>('/auth/login', data);
   },
-  logout: async () => api.post('/auth/logout'),
+  logout: async () => {
+    localStorage.removeItem('lastLoginEmail');
+    return api.post('/auth/logout');
+  },
   refreshToken: async () => {
     const refreshToken = localStorage.getItem('refreshToken');
     return api.post('/auth/refresh', { refreshToken });
@@ -20,6 +25,9 @@ export const authApi = {
   // Email verification
   verifyEmail: async (data: VerifyEmailDto) => {
     return api.post('/auth/verify-email', data);
+  },
+  resendVerificationEmail: async (email: string) => {
+    return api.post('/auth/resend-verification', { email });
   },
 
   // Password Management

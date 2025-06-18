@@ -15,6 +15,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DownloadIcon from '@mui/icons-material/Download';
 import ShareIcon from '@mui/icons-material/Share';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import AddAssetDialog from '../components/AddAssetDialog';
+import AddIcon from '@mui/icons-material/Add';
 
 const PortfolioDashboard = () => {
   const { portfolioId } = useParams();
@@ -26,6 +28,21 @@ const PortfolioDashboard = () => {
   const [healthMetrics, setHealthMetrics] = useState<PortfolioHealthMetrics | null>(null);
   const [selectedTab, setSelectedTab] = useState(0);
   const [timeFrame, setTimeFrame] = useState('1M');
+  const [isAddAssetOpen, setIsAddAssetOpen] = useState(false);
+
+  const refetchPortfolio = async () => {
+    if (portfolioId) {
+      const portfolioData = await dashboardService.getPortfolioDetails(portfolioId);
+      setPortfolio(portfolioData);
+    }
+  };
+
+  const refetchAssetDistribution = async () => {
+    if (portfolioId) {
+      const portfolioData = await dashboardService.getPortfolioDetails(portfolioId);
+      setPortfolio(portfolioData);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -288,9 +305,9 @@ const PortfolioDashboard = () => {
       
       {/* Tab Content */}
       {selectedTab === 0 && (
-        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} sx={{ mb: 4 }}>
           {/* Performance Chart - Full Width */}
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ mb: { xs: 3, sm: 4 } }}>
             <Box sx={{ 
               bgcolor: 'background.paper', 
               borderRadius: 2, 
@@ -308,7 +325,7 @@ const PortfolioDashboard = () => {
           </Grid>
           
           {/* Summary and Health - Equal Width */}
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} sx={{ mb: { xs: 3, sm: 4 } }}>
             <Box sx={{ 
               bgcolor: 'background.paper', 
               borderRadius: 2, 
@@ -316,7 +333,8 @@ const PortfolioDashboard = () => {
               boxShadow: 1,
               height: '100%',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              mb: { xs:2, sm: 0 }
             }}>
               <PortfolioSummary 
                 portfolioId={portfolioId || ''}
@@ -325,7 +343,7 @@ const PortfolioDashboard = () => {
             </Box>
           </Grid>
           
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} sx={{ mb: { xs: 3, sm: 4 } }}>
             <Box sx={{ 
               bgcolor: 'background.paper', 
               borderRadius: 2, 
@@ -340,7 +358,7 @@ const PortfolioDashboard = () => {
           </Grid>
           
           {/* Asset Distribution and Recent Activity - 2/3 and 1/3 Split */}
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={8} sx={{ mb: { xs: 3, sm: 4 } }}>
             <Box sx={{ 
               bgcolor: 'background.paper', 
               borderRadius: 2, 
@@ -352,13 +370,13 @@ const PortfolioDashboard = () => {
               flexDirection: 'column'
             }}>
               <Typography variant="h6" sx={{ mb: 2 }}>Asset Distribution</Typography>
-              <Box sx={{ flex: 1, minHeight: 0 }}>
+              <Box sx={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
                 <AssetDistribution portfolioId={portfolioId || ''} />
               </Box>
             </Box>
           </Grid>
           
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={4} sx={{ mb: { xs: 3, sm: 4 } }}>
             <Box sx={{ 
               bgcolor: 'background.paper', 
               borderRadius: 2, 
@@ -383,13 +401,17 @@ const PortfolioDashboard = () => {
           bgcolor: 'background.paper', 
           borderRadius: 2, 
           p: { xs: 2, sm: 3 },
-          boxShadow: 1
+          boxShadow: 1,
+          height: { xs: 'auto', sm: '600px' },
+          minHeight: { xs: '400px', sm: '600px' }
         }}>
           <Typography variant="h5" sx={{ mb: 3 }}>Asset Breakdown</Typography>
-          <AssetDistribution 
-            portfolioId={portfolioId || ''} 
-            detailedView 
-          />
+          <Box sx={{ height: '100%', overflow: 'hidden' }}>
+            <AssetDistribution 
+              portfolioId={portfolioId || ''} 
+              detailedView x
+            />
+          </Box>
         </Box>
       )}
       
@@ -401,7 +423,8 @@ const PortfolioDashboard = () => {
               borderRadius: 2, 
               p: { xs: 2, sm: 3 },
               boxShadow: 1,
-              height: '100%'
+              height: { xs: 'auto', sm: '500px' },
+              minHeight: { xs: '400px', sm: '500px' }
             }}>
               <PerformanceChart 
                 timeFrame={timeFrame}
@@ -417,7 +440,8 @@ const PortfolioDashboard = () => {
               borderRadius: 2, 
               p: { xs: 2, sm: 3 },
               boxShadow: 1,
-              height: '100%'
+              height: { xs: 'auto', sm: '400px' },
+              minHeight: { xs: '300px', sm: '400px' }
             }}>
               <Typography variant="h6" gutterBottom>Historical Returns</Typography>
               {/* Historical returns chart would go here */}
@@ -429,7 +453,8 @@ const PortfolioDashboard = () => {
               borderRadius: 2, 
               p: { xs: 2, sm: 3 },
               boxShadow: 1,
-              height: '100%'
+              height: { xs: 'auto', sm: '400px' },
+              minHeight: { xs: '300px', sm: '400px' }
             }}>
               <Typography variant="h6" gutterBottom>Benchmark Comparison</Typography>
               {/* Benchmark comparison chart would go here */}
@@ -446,7 +471,8 @@ const PortfolioDashboard = () => {
               borderRadius: 2, 
               p: { xs: 2, sm: 3 },
               boxShadow: 1,
-              height: '100%'
+              height: { xs: 'auto', sm: '500px' },
+              minHeight: { xs: '400px', sm: '500px' }
             }}>
               <RiskAnalysis portfolioId={portfolioId || ''} />
             </Box>
@@ -457,7 +483,8 @@ const PortfolioDashboard = () => {
               borderRadius: 2, 
               p: { xs: 2, sm: 3 },
               boxShadow: 1,
-              height: '100%'
+              height: { xs: 'auto', sm: '500px' },
+              minHeight: { xs: '400px', sm: '500px' }
             }}>
               <CorrelationMatrix portfolioId={portfolioId || ''} />
             </Box>
@@ -467,7 +494,9 @@ const PortfolioDashboard = () => {
               bgcolor: 'background.paper', 
               borderRadius: 2, 
               p: { xs: 2, sm: 3 },
-              boxShadow: 1
+              boxShadow: 1,
+              height: { xs: 'auto', sm: '400px' },
+              minHeight: { xs: '300px', sm: '400px' }
             }}>
               <Typography variant="h6" gutterBottom>Portfolio Stress Test</Typography>
               {/* Stress test visualization would go here */}
@@ -583,6 +612,29 @@ const PortfolioDashboard = () => {
           {error}
         </Alert>
       </Snackbar>
+
+      <Box sx={{ mb: 3, mt: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h4">Portfolio Dashboard</Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => setIsAddAssetOpen(true)}
+        >
+          Add Asset
+        </Button>
+      </Box>
+
+      <AddAssetDialog
+        open={isAddAssetOpen}
+        onClose={() => setIsAddAssetOpen(false)}
+        portfolioId={portfolioId || ''}
+        onAssetAdded={() => {
+          // Refresh portfolio data
+          refetchPortfolio();
+          // Refresh asset distribution
+          refetchAssetDistribution();
+        }}
+      />
     </Container>
   );
 };

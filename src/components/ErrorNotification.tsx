@@ -7,6 +7,7 @@ export const ErrorNotification = () => {
   return (
     <Snackbar
       open={!!error}
+      autoHideDuration={6000}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
       <Alert 

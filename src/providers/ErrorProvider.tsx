@@ -1,4 +1,8 @@
-import { createContext, useContext, useState, ReactNode, useCallback } from "react";
+import { createContext, useContext, useState,
+  ReactNode, useCallback,
+  useEffect
+} from "react";
+import { setGlobalShowError } from '../api/errorHandlerRef';
 
 type ErrorContextType = {
   error: string | null;
@@ -15,6 +19,14 @@ export const ErrorProvider = ({ children }: { children: ReactNode }) => {
     // Auto-hide after 6 seconds
     setTimeout(() => setError(null), 6000);
   }, []);
+
+  useEffect(() => {
+    setGlobalShowError(showError);
+    // Cleanup on unmount
+    return () => {
+      setGlobalShowError(null);
+    };
+  }, [showError]);
 
   return (
     <ErrorContext.Provider value={{ error, showError }}>

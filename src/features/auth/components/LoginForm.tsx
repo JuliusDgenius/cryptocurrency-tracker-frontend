@@ -17,18 +17,32 @@ import { Link, useNavigate } from 'react-router-dom';
 export const LoginForm = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
 
-    const { 
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<LoginDto>({
-        resolver: zodResolver(loginSchema),
-    });
+  const { 
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues
+  } = useForm<LoginDto>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    const { login } = useAuth();
-    const navigate = useNavigate();
-  
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleResendVerification = async () => {
+    try {
+      setIsResending(true);
+      const email = getValues('email');
+      await authApi.resendVerificationEmail(email);
+      setError('Verification email sent. Please check your inbox.');
+    } catch (err) {
+      setError(handleApiError(err));
+    } finally {
+      setIsResending(false);
+    }
+  };
 
     const onSubmit = async (data: LoginDto) => {
       try {
@@ -44,25 +58,33 @@ export const LoginForm = () => {
       }
     };
 
-    return (
-      <Container maxWidth="sm">
-
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{
-            mt: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 3
-          }}
-        >
-
-          {error && (
-            <Alert severity="error" sx={{width: '100%'}}>
-              {error}
-            </Alert>
-          )}
+  return (
+    <Container maxWidth="sm">
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{
+          mt: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3
+        }}
+      >
+        {error && (
+          <Alert severity="error" sx={{width: '100%'}}>
+            {error}
+            {error === 'Please verify your email first' && (
+              <Button
+                onClick={handleResendVerification}
+                disabled={isResending}
+                sx={{ ml: 2 }}
+                size="small"
+              >
+                {isResending ? 'Sending...' : 'Resend Verification'}
+              </Button>
+            )}
+          </Alert>
+        )}
 
           <TextField 
             fullWidth
@@ -157,32 +179,32 @@ export const LoginForm = () => {
             }}
           />
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            variant="contained"
-            fullWidth
-            size='large'
-            sx={{ mt: 2, py: 1.5 }}
-          >
-            {isLoading && (
-              <Box sx={{ position: 'absolute', color: 'primary.light' }}>
-                <CircularProgress size={24} />
-                <span style={{ visibility: 'hidden' }}>
-                  Sign In
-                </span>
-              </Box>
-            )}
-            {!isLoading && 'Sign In'}
-          </Button>
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <Typography variant='body2'>
-              <Link to="/request-reset" style={{ textDecoration: 'none', color: '#1976d2' }}>
-                Forgot Password?
-              </Link>
-            </Typography>
-          </Box>
+        <Button
+          type="submit"
+          disabled={isLoading}
+          variant="contained"
+          fullWidth
+          size='large'
+          sx={{ mt: 2, py: 1.5 }}
+        >
+          {isLoading && (
+            <Box sx={{ position: 'absolute', color: 'primary.light' }}>
+              <CircularProgress size={24} />
+              <span style={{ visibility: 'hidden' }}>
+                Sign In
+              </span>
+            </Box>
+          )}
+          {!isLoading && 'Sign In'}
+        </Button>
+        <Box sx={{ mt: 2, textAlign: 'center' }}>
+          <Typography variant='body2'>
+            <Link to="/request-reset" style={{ textDecoration: 'none', color: '#1976d2' }}>
+              Forgot Password?
+            </Link>
+          </Typography>
         </Box>
-      </Container>
-    );
+      </Box>
+    </Container>
+  );
 };
