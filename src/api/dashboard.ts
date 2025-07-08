@@ -233,6 +233,58 @@ const dashboardService = {
     } catch (error) {
       throw new Error('Failed to delete asset');
     }
+  },
+
+  async getExchangeAccounts(): Promise<any[]> {
+    try {
+      const response = await api.get('/exchange-accounts/accounts');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to fetch exchange accounts');
+    }
+  },
+
+  async addExchangeAccount(data: { exchange: string; apiKey: string; apiSecret: string; label: string }): Promise<any> {
+    try {
+      const response = await api.post('/exchange-accounts/exchange', data);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to add exchange account');
+    }
+  },
+
+  async deleteExchangeAccount(id: string): Promise<void> {
+    try {
+      await api.delete(`/exchange-accounts/delete/${id}`);
+    } catch (error) {
+      throw new Error('Failed to delete exchange account');
+    }
+  },
+
+  async getWalletAddresses(): Promise<any[]> {
+    try {
+      const response = await api.get('/wallet-addresses/addresses');
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to fetch wallet addresses');
+    }
+  },
+
+  async addWalletAddress(data: { blockchain: string; address: string; label?: string }): Promise<any> {
+    try {
+      const response = await api.post('/wallet-addresses/create-wallet', data);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to add wallet address');
+    }
+  },
+
+  async deleteWalletAddress(id: string): Promise<void> {
+    try {
+      await api.delete(`/wallet-addresses/delete/${id}`);
+    } catch (error) {
+      throw new Error('Failed to delete wallet address');
+    }
   }
 };
 

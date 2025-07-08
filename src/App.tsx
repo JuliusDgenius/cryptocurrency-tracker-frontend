@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { LoginPage } from './features/auth/pages/LoginPage';
 import { RegisterPage } from './features/auth/pages/RegisterPage';
@@ -13,6 +14,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import PortfolioDashboard from './features/dashboard/pages/PortfolioDashboard';
 import DemoDashboard from './features/dashboard/pages/DemoDashboard';
 import SettingsPage from './features/settings/pages/SettingsPage';
+import AccountsPage from './features/accounts/AccountsPage';
 
 function App() {
   return (
@@ -37,6 +39,7 @@ function App() {
               <Route path='/dashboard' element={<DashboardPageHome />} />
               <Route path='/portfolio/:portfolioId' element={<PortfolioDashboard />} />
               <Route path='settings' element={<SettingsPage />} />
+              <Route path="/accounts" element={<AccountsPage />} />
               <Route path="/verify-email" element={<VerifyEmailPage />} />
             </Route>
             {/* Not Found Route */}

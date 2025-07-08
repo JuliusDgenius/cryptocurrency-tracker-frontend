@@ -4,6 +4,7 @@ import App from './App.tsx';
 import { AuthProvider } from './providers/AuthProvider.tsx';
 import { CustomThemeProvider } from './providers/ThemeProvider.tsx';
 import { ErrorProvider } from './providers/ErrorProvider.tsx';
+import { PriceStreamProvider } from './providers/PriceStreamProvider.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,7 +20,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <CustomThemeProvider>
       <ErrorProvider>
         <AuthProvider>
+        <PriceStreamProvider>
           <App />
+          </PriceStreamProvider>
         </AuthProvider>
       </ErrorProvider>
     </CustomThemeProvider>

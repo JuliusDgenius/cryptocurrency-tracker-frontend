@@ -46,15 +46,25 @@ export const Navbar = () => {
 
         {/* Dashboard link for authenticated users */}
         {user && (
-          <Button 
-            component={Link}
-            to="/dashboard"
-            color="inherit"
-            startIcon={<Dashboard />}
-            sx={{ mr: 2 }}
-          >
-            Dashboard
-          </Button>
+          <>
+            <Button 
+              component={Link}
+              to="/dashboard"
+              color="inherit"
+              startIcon={<Dashboard />}
+              sx={{ mr: 2 }}
+            >
+              Dashboard
+            </Button>
+            <Button
+              component={Link}
+              to="/accounts"
+              color="inherit"
+              sx={{ mr: 2 }}
+            >
+              Accounts
+            </Button>
+          </>
         )}
 
         {/* Center - App title */}

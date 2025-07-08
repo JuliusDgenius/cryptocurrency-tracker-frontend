@@ -100,9 +100,9 @@ const PortfolioGrid = ({
 
   return (
     <>
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
         {portfolios.map((portfolio) => (
-          <Grid key={portfolio.id} xs={12} sm={6} md={4}>
+          <Grid key={portfolio.id} item xs={12} sm={6} md={4} lg={3}>
             <Card
               onClick={() => navigate(`/portfolio/${portfolio.id}`)}
               sx={{ 
@@ -112,11 +112,13 @@ const PortfolioGrid = ({
                 border: portfolio.isPrimary ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.12)',
                 position: 'relative',
                 cursor: 'pointer',
+                transition: 'box-shadow 0.2s, transform 0.2s',
                 '&:hover': {
-                  boxShadow: 3,
-                  transform: 'translateY(-2px)',
-                  transition: 'all 0.2s ease-in-out'
-                }
+                  boxShadow: 6,
+                  transform: 'translateY(-4px) scale(1.02)',
+                },
+                bgcolor: 'background.paper',
+                m: { xs: 0, sm: 1 },
               }}
             >
               {portfolio.isPrimary && (
@@ -133,7 +135,7 @@ const PortfolioGrid = ({
                 />
               )}
               
-              <CardContent sx={{ flexGrow: 1 }}>
+              <CardContent sx={{ flexGrow: 1, p: { xs: 2, md: 3 } }}>
                 <Box sx={{ 
                   display: 'flex', 
                   justifyContent: 'space-between',
@@ -206,12 +208,7 @@ const PortfolioGrid = ({
                 </Typography>
               </CardContent>
               
-              <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'flex-end',
-                p: 1,
-                gap: 1
-              }}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: { xs: 1, md: 2 }, gap: 1 }}>
                 <Button 
                   size="small" 
                   variant="outlined"
@@ -246,7 +243,7 @@ const PortfolioGrid = ({
       </Grid>
       
       {/* Create Portfolio Dialog */}
-      <Dialog open={openCreate} onClose={() => setOpenCreate(false)}>
+      <Dialog open={openCreate} onClose={() => setOpenCreate(false)} fullWidth maxWidth="sm">
         <DialogTitle>Create New Portfolio</DialogTitle>
         <DialogContent>
           <TextField
@@ -282,7 +279,7 @@ const PortfolioGrid = ({
       </Dialog>
       
       {/* Delete Confirmation Dialog */}
-      <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+      <Dialog open={openDelete} onClose={() => setOpenDelete(false)} fullWidth maxWidth="xs">
         <DialogTitle>Delete Portfolio</DialogTitle>
         <DialogContent>
           <Typography>
@@ -302,7 +299,7 @@ const PortfolioGrid = ({
       </Dialog>
       
       {/* Edit Portfolio Dialog */}
-      <Dialog open={openEdit} onClose={() => setOpenEdit(false)}>
+      <Dialog open={openEdit} onClose={() => setOpenEdit(false)} fullWidth maxWidth="sm">
         <DialogTitle>Edit Portfolio</DialogTitle>
         <DialogContent>
           <TextField

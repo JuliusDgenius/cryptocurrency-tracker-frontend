@@ -17,6 +17,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import AddAssetDialog from '../components/AddAssetDialog';
 import AddIcon from '@mui/icons-material/Add';
+import { usePriceStream } from '../../../hooks/usePriceStream';
 
 const PortfolioDashboard = () => {
   const { portfolioId } = useParams();
@@ -29,6 +30,8 @@ const PortfolioDashboard = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [timeFrame, setTimeFrame] = useState('1M');
   const [isAddAssetOpen, setIsAddAssetOpen] = useState(false);
+
+  const prices = usePriceStream();
 
   const refetchPortfolio = async () => {
     if (portfolioId) {
@@ -635,6 +638,22 @@ const PortfolioDashboard = () => {
           refetchAssetDistribution();
         }}
       />
+
+      {/* Live Prices Section */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h6">Live Prices</Typography>
+        <Box component="ul" sx={{ pl: 2 }}>
+          {prices.length === 0 ? (
+            <Typography variant="body2">No live prices available.</Typography>
+          ) : (
+            prices.map((p) => (
+              <li key={p.symbol}>
+                <strong>{p.symbol}:</strong> {p.price} (at {new Date(p.timestamp).toLocaleTimeString()})
+              </li>
+            ))
+          )}
+        </Box>
+      </Box>
     </Container>
   );
 };
