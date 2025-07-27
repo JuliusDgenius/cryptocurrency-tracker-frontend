@@ -3,6 +3,7 @@ export type User = {
     email: string;
     name: string;
     verified: boolean;
+    twoFactorEnabled?: boolean;
     preferences: {
         currency?: string;
         theme?: string;
@@ -14,6 +15,13 @@ export type Token = {
     accessToken: string;
     refreshToken: string;
 };
+
+export type TempToken = {
+    require2FA: boolean;
+    tempToken: string;
+};
+
+export type LoginResponse = Token & { user: User } | TempToken;
 
 export interface RegisterDto {
     email: string;
@@ -42,4 +50,18 @@ export interface RequestPasswordResetDto {
 export interface DeleteAccountDto {
   password: string;
   reason?: string;
+};
+
+export interface Setup2FADto {
+  totpCode: string;
+};
+
+export interface Verify2FADto {
+  totpCode: string;
+};
+
+export interface TwoFASetupResponse {
+  secret: string;
+  qrCodeUrl: string;
+  otpauthUrl: string;
 };

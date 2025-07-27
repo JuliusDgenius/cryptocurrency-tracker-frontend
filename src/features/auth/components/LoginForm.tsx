@@ -6,18 +6,20 @@ import {
   Container, TextField,
   Typography, Box 
 } from '@mui/material';
-import { LoginDto } from '../../../types/auth';
+import { LoginDto, TempToken } from '../../../types/auth';
 import { loginSchema } from '../../../schemas/auth';
 import { useState } from 'react';
 import { authApi } from '../../../api/auth';
 import { handleApiError } from '../../../utils/errorHandler';
 import { useAuth } from '../../../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
+import { TwoFactorVerificationForm } from './TwoFactorVerificationForm';
 
 export const LoginForm = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
+  const [tempToken, setTempToken] = useState<string | null>(null);
 
   const { 
     register,
@@ -44,19 +46,38 @@ export const LoginForm = () => {
     }
   };
 
-    const onSubmit = async (data: LoginDto) => {
-      try {
-        setIsLoading(true);
-        const response = await authApi.login(data);
-        await login(response.data);
-        navigate('/dashboard')
-      } catch (err) {
-        const error = handleApiError(err);
-        setError(error);
-      } finally {
-        setIsLoading(false);
+  const onSubmit = async (data: LoginDto) => {
+    try {
+      setIsLoading(true);
+      setError('');
+      const response = await authApi.login(data);
+      
+      // Check if 2FA is required
+      if ('require2FA' in response.data && response.data.require2FA) {
+        setTempToken(response.data.tempToken);
+        return;
       }
-    };
+      
+      // Normal login flow
+      await login(response.data);
+      navigate('/dashboard');
+    } catch (err) {
+      const error = handleApiError(err);
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleBackToLogin = () => {
+    setTempToken(null);
+    setError('');
+  };
+
+  // Show 2FA verification form if temp token exists
+  if (tempToken) {
+    return <TwoFactorVerificationForm tempToken={tempToken} onBack={handleBackToLogin} />;
+  }
 
   return (
     <Container maxWidth="sm">

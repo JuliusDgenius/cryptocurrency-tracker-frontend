@@ -1,5 +1,6 @@
 import { Token, LoginDto, RegisterDto, VerifyEmailDto, 
-  ResetPasswordDto, DeleteAccountDto, 
+  ResetPasswordDto, DeleteAccountDto, LoginResponse, Setup2FADto, 
+  Verify2FADto, TwoFASetupResponse
 } from '../types/auth';
 import { api } from './axios';
 
@@ -11,7 +12,7 @@ export const authApi = {
   login: async (data: LoginDto) => {
     // Store email for potential verification resend
     localStorage.setItem('lastLoginEmail', data.email);
-    return api.post<Token>('/auth/login', data);
+    return api.post<LoginResponse>('/auth/login', data);
   },
   logout: async () => {
     localStorage.removeItem('lastLoginEmail');
@@ -43,12 +44,17 @@ export const authApi = {
     return api.delete('/auth/account-delete', { data });
   },
 
-  // 2FA
-  setup2FA: async () => {
-    api.post<{ secret: string, qrCode: string }>('/auth/setup-2fa');
+  // 2FA Setup and Management
+  initiate2FASetup: async () => {
+    return api.post<TwoFASetupResponse>('/auth/initiate-2fa-setup');
   },
-  verify2FA: async (token: string) => {
-    api.post('/auth/verify-2fa', token);
+  complete2FASetup: async (data: Setup2FADto & { secret: string }) => {
+    return api.post('/auth/complete-2fa-setup', data);
   },
-  disable2FA: async () => {'/auth/disable-2fa'},
+  verify2FA: async (data: Verify2FADto & { tempToken: string }) => {
+    return api.post<Token & { user: any }>('/auth/verify-2fa', data);
+  },
+  disable2FA: async () => {
+    return api.post('/auth/disable-2fa');
+  },
 };

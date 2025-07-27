@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState } from "react";
-import { User, Token } from "../types/auth";
+import { createContext, useEffect, useState, ReactNode } from "react";
+import { User, Token, LoginResponse } from "../types/auth";
 import { api } from "../api/axios";
 import { RegisterDto } from "../schemas/auth";
 import { authApi } from "../api/auth";
@@ -7,26 +7,49 @@ import { authApi } from "../api/auth";
 type AuthContextType = {
   user: User | null;
   isLoading: boolean
-  login: (tokens: Token) => Promise<void>;
+  login: (loginResponse: LoginResponse) => Promise<void>;
   logout: () => void;
   registerContext: (registerData: RegisterDto) => Promise<void>;
-  handle2FASetup: (token: string, secret?: string) => Promise<void>;
+  refreshUser: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextType>(null!);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const login = async (tokens: Token) => {
-    localStorage.setItem('accessToken', tokens.accessToken);
-    localStorage.setItem('refreshToken', tokens.refreshToken);
+  const login = async (loginResponse: LoginResponse) => {
+    // Check if this is a 2FA response (temp token)
+    if ('require2FA' in loginResponse && loginResponse.require2FA) {
+      // Don't store tokens yet, just return - the 2FA verification will handle token storage
+      return;
+    }
 
-    // Fetch user profile
-    const { data } = await api.get('/auth/me');
-    console.log('User profile fetched: ', data);
-    setUser(data); // Triggers re-render
+    // Normal login flow - store tokens and fetch user
+    if ('accessToken' in loginResponse && 'refreshToken' in loginResponse) {
+      localStorage.setItem('accessToken', loginResponse.accessToken);
+      localStorage.setItem('refreshToken', loginResponse.refreshToken);
+
+      // If user data is included in the response, use it
+      if ('user' in loginResponse && loginResponse.user) {
+        setUser(loginResponse.user);
+      } else {
+        // Fetch user profile
+        await refreshUser();
+      }
+    }
+  };
+
+  const refreshUser = async () => {
+    try {
+      const { data } = await api.get('/auth/me');
+      setUser(data);
+      return data;
+    } catch (error) {
+      console.error('Failed to refresh user data:', error);
+      throw error;
+    }
   };
 
   const registerContext = async (registerData: RegisterDto) => {
@@ -43,18 +66,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = async () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    setUser(null);
-  };
-
-  const handle2FASetup = async (token: string) => {
     try {
-      await authApi.verify2FA(token);
-      const { data } = await api.get('/auth/me');
-      setUser(data);
+      // Call logout endpoint if user is authenticated
+      if (localStorage.getItem('accessToken')) {
+        await authApi.logout();
+      }
     } catch (error) {
-      throw new Error('2FA verification failed')
+      console.error('Logout API call failed:', error);
+    } finally {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      setUser(null);
     }
   };
 
@@ -121,8 +143,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       login,
       logout,
       registerContext,
-      handle2FASetup
-      }}>
+      refreshUser
+    }}>
       {children}
     </AuthContext.Provider>
   );
