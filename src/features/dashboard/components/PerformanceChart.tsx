@@ -16,7 +16,10 @@ interface PerformanceChartProps {
 }
 
 const PerformanceChart: React.FC<PerformanceChartProps> = ({ 
-  portfolioId, timeFrame, onTimeFrameChange, detailedView = false 
+  portfolioId,
+  timeFrame,
+  // onTimeFrameChange, 
+  detailedView = false 
 }) => {
   const theme = useTheme();
   const [performanceData, setPerformanceData] = useState<PerformanceDataPoint[]>([]);

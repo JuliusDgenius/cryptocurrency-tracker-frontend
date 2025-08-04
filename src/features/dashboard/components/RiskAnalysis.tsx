@@ -4,7 +4,7 @@ import {
   CircularProgress
 } from '@mui/material';
 import { RiskAnalysisData } from '@/types/dashboard';
-import dashboardService from '../../../api/dashboard';
+import dashboardService from '@/api/dashboard';
 
 interface RiskAnalysisProps {
   portfolioId: string;

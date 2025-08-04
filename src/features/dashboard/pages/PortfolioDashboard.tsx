@@ -7,12 +7,12 @@ import {
 import { 
   PortfolioHeader, PortfolioSelector, PerformanceChart, 
   PortfolioSummary, AssetDistribution, RecentActivity,
-  PortfolioHealth, RiskAnalysis, CorrelationMatrix
+  PortfolioHealth, RiskAnalysis, CorrelationMatrix,
+  CsvManagement
 } from '../components';
 import dashboardService from '../../../api/dashboard';
-import { Portfolio, PortfolioHealthMetrics } from '@/types/dashboard';
+import { Portfolio } from '@/types/dashboard';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import DownloadIcon from '@mui/icons-material/Download';
 import ShareIcon from '@mui/icons-material/Share';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import AddAssetDialog from '../components/AddAssetDialog';
@@ -26,7 +26,6 @@ const PortfolioDashboard = () => {
   const [error, setError] = useState<string | null>(null);
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
-  const [healthMetrics, setHealthMetrics] = useState<PortfolioHealthMetrics | null>(null);
   const [selectedTab, setSelectedTab] = useState(0);
   const [timeFrame, setTimeFrame] = useState('1M');
   const [isAddAssetOpen, setIsAddAssetOpen] = useState(false);
@@ -68,8 +67,7 @@ const PortfolioDashboard = () => {
           const portfolioData = await dashboardService.getPortfolioDetails(portfolioId);
           setPortfolio(portfolioData);
           
-          const metrics = await dashboardService.getPortfolioHealth(portfolioId);
-          setHealthMetrics(metrics);
+          await dashboardService.getPortfolioHealth(portfolioId);
         }
       } catch (err) {
         console.error('Failed to load portfolio data:', err);
@@ -83,6 +81,7 @@ const PortfolioDashboard = () => {
   }, [portfolioId, navigate]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    event.preventDefault();
     setSelectedTab(newValue);
   };
 
@@ -200,22 +199,13 @@ const PortfolioDashboard = () => {
           position: { sm: 'relative' },
           zIndex: 1
         }}>
-          <Button 
-            startIcon={<DownloadIcon />} 
-            variant="contained"
-            fullWidth={false}
-            sx={{ 
-              flex: { xs: '1 1 auto', sm: '0 0 auto' },
-              minWidth: { xs: '120px', sm: 'auto' },
-              whiteSpace: 'nowrap',
-              bgcolor: 'primary.main',
-              '&:hover': {
-                bgcolor: 'primary.dark',
-              }
+          <CsvManagement
+            portfolioId={portfolioId || ''}
+            onImportSuccess={() => {
+              refetchPortfolio();
+              refetchAssetDistribution();
             }}
-          >
-            Export
-          </Button>
+          />
           <Button 
             startIcon={<ShareIcon />} 
             variant="contained"
@@ -261,7 +251,7 @@ const PortfolioDashboard = () => {
       {/* Timeframe Selector */}
       <Tabs 
         value={timeFrame} 
-        onChange={(e, newValue) => setTimeFrame(newValue)}
+        onChange={(_, newValue) => setTimeFrame(newValue)}
         variant="scrollable"
         scrollButtons="auto"
         sx={{ 
@@ -412,7 +402,7 @@ const PortfolioDashboard = () => {
           <Box sx={{ height: '100%', overflow: 'hidden' }}>
             <AssetDistribution 
               portfolioId={portfolioId || ''} 
-              detailedView x
+              detailedView
             />
           </Box>
         </Box>

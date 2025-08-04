@@ -4,10 +4,10 @@ import { Button, CircularProgress, Container,
     TextField, Box, Typography, Alert } from '@mui/material';
 import { useState, } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authApi } from '../../../api/auth';
-import { handleApiError } from '../../../utils/errorHandler';
-import { ResetPasswordDto } from '../../../types/auth';
-import { resetPasswordFormSchema, ResetPasswordFormValues } from '../../../schemas/auth';
+import { authApi } from '@/api/auth';
+import { handleApiError } from '@/utils/errorHandler';
+import { ResetPasswordDto } from '@/types/auth';
+import { resetPasswordFormSchema, ResetPasswordFormValues } from '@/schemas/auth';
 
 interface ResetPasswordFormProps {
   token: string;

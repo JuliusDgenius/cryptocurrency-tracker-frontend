@@ -27,6 +27,8 @@ const AddExchangeDialog: React.FC<AddExchangeDialogProps> = ({ open, onClose, on
       setApiKey('');
       setApiSecret('');
       setLabel('');
+      setExchange('binance');
+      onClose();
     } catch (err: any) {
       setError(err.message || 'Failed to add exchange');
     } finally {
@@ -38,6 +40,7 @@ const AddExchangeDialog: React.FC<AddExchangeDialogProps> = ({ open, onClose, on
     setApiKey('');
     setApiSecret('');
     setLabel('');
+    setExchange('binance');
     setError(null);
     setLoading(false);
     onClose();

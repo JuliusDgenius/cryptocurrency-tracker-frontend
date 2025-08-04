@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -6,10 +6,8 @@ import {
   Card,
   CardContent,
   Switch,
-  FormControlLabel,
   Button,
   Alert,
-  Divider,
   List,
   ListItem,
   ListItemText,

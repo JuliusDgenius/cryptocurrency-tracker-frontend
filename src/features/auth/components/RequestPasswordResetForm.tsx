@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { authApi } from '../../../api/auth';
-import { RequestPasswordResetDto, requestPasswordResetSchema } from '../../../schemas/auth';
+import { authApi } from '@/api/auth';
+import { RequestPasswordResetDto, requestPasswordResetSchema } from '@/schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Container, Button, Box, TextField,
   CircularProgress, Alert, Typography,
@@ -10,7 +10,7 @@ import { Container, Button, Box, TextField,
  } from '@mui/material';
  import CheckIcon from '@mui/icons-material/Check';
  import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { handleApiError } from '../../../utils/errorHandler';
+import { handleApiError } from '@/utils/errorHandler';
 
 export const RequestPasswordResetForm = () => {
   const [error, setError] = useState('');
@@ -188,13 +188,13 @@ export const RequestPasswordResetForm = () => {
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   Didn't receive the email? Check your spam folder or{' '}
                   <MuiLink 
-                    component={Link} 
                     onClick={() => {
                       setIsSubmitted(false);
                       setSubmittedEmail("");
                     }}
                     sx={{ 
-                      color: 'primary.main', 
+                      color: 'primary.main',
+                      cursor: 'pointer',
                       '&:hover': { textDecoration: 'underline' } 
                     }}
                   >

@@ -4,7 +4,7 @@ import {
   TableContainer, TableHead, TableRow, CircularProgress
 } from '@mui/material';
 import { CorrelationMatrixData } from '@/types/dashboard';
-import dashboardService from '../../../api/dashboard';
+import dashboardService from '@/api/dashboard';
 
 interface CorrelationMatrixProps {
   portfolioId: string;

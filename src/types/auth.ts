@@ -1,8 +1,9 @@
 export type User = {
     id: string;
     email: string;
-    name: string;
+    name: string | null;
     verified: boolean;
+    roles: string[];
     twoFactorEnabled?: boolean;
     preferences: {
         currency?: string;

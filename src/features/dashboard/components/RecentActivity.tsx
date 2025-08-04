@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography, useTheme, CircularProgress } from '@mui/material';
 import type { RecentActivityData } from '@/types/dashboard';
-import dashboardService from '../../../api/dashboard';
+import dashboardService from '@/api/dashboard';
 
 interface RecentActivityProps {
   portfolioId?: string;

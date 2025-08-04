@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  Box, Grid, Typography, Chip,
-  Card, Button, CircularProgress
+  Box, Grid, Typography,
+  Card, CircularProgress
 } from '@mui/material';
 import { AssetDistributionData, Portfolio, PortfolioSummaryData } from '@/types/dashboard';
-import dashboardService from '../../../api/dashboard';
+import dashboardService from '@/api/dashboard';
 
 interface PortfolioSummaryProps {
   portfolio?: Portfolio;
@@ -15,7 +15,7 @@ interface PortfolioSummaryProps {
 }
 
 const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ 
-  portfolio, 
+  // portfolio, 
   portfolioId, 
   timeFrame = '1M',
   demoMode = false,

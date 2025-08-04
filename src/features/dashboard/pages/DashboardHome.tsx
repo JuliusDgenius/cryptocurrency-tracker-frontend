@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../hooks/useAuth';
 import { 
-  Container, Box, Typography, Button, Grid, 
-  CircularProgress, Alert, Card, CardContent
+  Container, Box, Typography, Button, 
+  CircularProgress, Alert,
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material'
 import PortfolioGrid from '../components/PortfolioGrid';

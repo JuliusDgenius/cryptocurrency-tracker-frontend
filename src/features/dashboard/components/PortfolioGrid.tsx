@@ -12,7 +12,7 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Portfolio } from '@/types/dashboard';
 import dashboardService from '../../../api/dashboard';
-import { useAuth } from '../../../hooks/useAuth';
+// import { useAuth } from '../../../hooks/useAuth';
 
 interface PortfolioGridProps {
   portfolios: Portfolio[];
@@ -25,7 +25,7 @@ interface PortfolioGridProps {
 const PortfolioGrid = ({ 
   portfolios, onCreateNew, onDelete, onSetPrimary, onUpdate 
 }: PortfolioGridProps) => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const [openCreate, setOpenCreate] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);

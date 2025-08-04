@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import type { AssetDistributionData } from '@/types/dashboard';
-import dashboardService from '../../../api/dashboard';
+import dashboardService from '@/api/dashboard';
 import { FC } from 'react';
 
 interface AssetDistributionProps {

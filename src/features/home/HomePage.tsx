@@ -345,8 +345,6 @@ const HomePage = () => {
                             }
                             if (statRef.current) {
                               animateValue(statRef.current, 0, stat.value, 1500)
-                            } else {
-                              animateValue(statRef.current, 0, stat.value, 1000);
                             }
                           }
                         },

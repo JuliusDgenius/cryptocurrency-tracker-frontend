@@ -1,10 +1,13 @@
-import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
+import React from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Box, Button, Typography, Paper, Alert } from '@mui/material';
 
-function ErrorFallback({ error, resetErrorBoundary }: { 
-  error: Error, 
-  resetErrorBoundary: () => void 
-}) {
+interface FallbackProps {
+  error: Error;
+  resetErrorBoundary: () => void;
+}
+
+function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   return (
     <Box 
       display="flex" 
@@ -50,11 +53,11 @@ function ErrorFallback({ error, resetErrorBoundary }: {
   );
 }
 
-export function ErrorBoundary({ children }: { children: React.ReactNode }) {
+export const AppErrorBoundary = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ReactErrorBoundary
+    <ErrorBoundary
       FallbackComponent={ErrorFallback}
-      onError={(error, info) => {
+      onError={(error, info: any) => {
         // Log errors to your error reporting service here
         console.error('Error caught by boundary:', error, info);
       }}
@@ -64,6 +67,6 @@ export function ErrorBoundary({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </ReactErrorBoundary>
+    </ErrorBoundary>
   );
 }

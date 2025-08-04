@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   FormControl, InputLabel, MenuItem, Select, 
   Button, Box, CircularProgress, Typography,
@@ -8,7 +8,6 @@ import AddIcon from '@mui/icons-material/Add';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import type { Portfolio } from '@/types/dashboard';
-import dashboardService from '../../../api/dashboard';
 
 interface PortfolioSelectorProps {
   portfolios: Portfolio[];

@@ -1,6 +1,6 @@
 import { useAuth } from "../hooks/useAuth";
 import { AppBar, Toolbar, IconButton, Typography, Button, Box, Menu, MenuItem, Avatar } from "@mui/material";
-import { NotificationsNone, Login, Dashboard } from "@mui/icons-material";
+import { NotificationsNone, Login, Dashboard, WatchLater } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from 'react';
 
@@ -64,6 +64,15 @@ export const Navbar = () => {
             >
               Accounts
             </Button>
+            <Button
+              component={Link}
+              to="/watchlists"
+              color="inherit"
+              startIcon={<WatchLater />}
+              sx={{ mr: 2 }}
+            >
+              Watchlists
+            </Button>
           </>
         )}
 
@@ -92,11 +101,11 @@ export const Navbar = () => {
                       fontSize: '1rem'
                     }}
                   >
-                    {user.name.charAt(0)}
+                    {user.name?.charAt(0) || 'U'}
                   </Avatar>
                 </IconButton>
                 <Typography variant="body1" sx={{ color: 'white' }}>
-                  {user.name}
+                  {user.name || 'User'}
                 </Typography>
               </Box>
               

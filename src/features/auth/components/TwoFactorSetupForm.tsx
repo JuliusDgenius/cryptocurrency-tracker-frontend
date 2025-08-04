@@ -3,13 +3,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Alert, Button,
   CircularProgress,
-  Container, TextField,
-  Typography, Box, Paper, Dialog, DialogTitle, DialogContent, DialogActions
+  TextField,
+  Typography, Box, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
-import { Setup2FADto, TwoFASetupResponse } from '../../../types/auth';
+import { Setup2FADto, TwoFASetupResponse } from '@/types/auth';
 import { useState, useEffect } from 'react';
-import { authApi } from '../../../api/auth';
-import { handleApiError } from '../../../utils/errorHandler';
+import { authApi } from '@/api/auth';
+import { handleApiError } from '@/utils/errorHandler';
 import { z } from 'zod';
 
 const setup2FASchema = z.object({

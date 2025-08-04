@@ -6,12 +6,12 @@ import {
   Container, TextField,
   Typography, Box 
 } from '@mui/material';
-import { LoginDto, TempToken } from '../../../types/auth';
-import { loginSchema } from '../../../schemas/auth';
+import { LoginDto } from '@/types/auth';
+import { loginSchema } from '@/schemas/auth';
 import { useState } from 'react';
-import { authApi } from '../../../api/auth';
-import { handleApiError } from '../../../utils/errorHandler';
-import { useAuth } from '../../../hooks/useAuth';
+import { authApi } from '@/api/auth';
+import { handleApiError } from '@/utils/errorHandler';
+import { useAuth } from '@/hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
 import { TwoFactorVerificationForm } from './TwoFactorVerificationForm';
 

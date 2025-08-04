@@ -53,7 +53,7 @@ export interface AssetDistributionData {
   value: number;
   allocation: number;
   category: string;
-  marketCap: string;
+  marketCap: number;
   twentyFourHourChange: number;
   profitLoss: number;
   profitLossPercentage: number;
