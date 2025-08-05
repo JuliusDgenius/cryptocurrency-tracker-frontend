@@ -23,8 +23,6 @@ export default defineConfig({
         target: process.env.VITE_API_URL || 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
-        // Remove unnecessary rewrite since you're not changing the path
-        // rewrite: (path) => path.replace(/^\/api/, '/api'),
       },
     },
   },
