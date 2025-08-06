@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://crypto-portfolio-backend-zq68.onrender.com/api/$1"
+    }
+  ]
+} 
