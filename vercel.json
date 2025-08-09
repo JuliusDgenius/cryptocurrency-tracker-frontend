@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/verify-email",
-      "destination": "https://crypto-portfolio-backend-zq68.onrender.com/verify-email"
+      "destination": "https://crypto-portfolio-backend-zq68.onrender.com/api/verify-email"
     },
     {
       "source": "/api/(.*)",
