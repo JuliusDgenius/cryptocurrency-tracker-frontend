@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/verify-email",
+      "destination": "https://crypto-portfolio-backend-zq68.onrender.com/verify-email"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "https://crypto-portfolio-backend-zq68.onrender.com/api/$1"
     }
