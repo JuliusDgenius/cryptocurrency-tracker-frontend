@@ -17,6 +17,7 @@ import { TwoFactorVerificationForm } from './TwoFactorVerificationForm';
 
 export const LoginForm = () => {
   const [error, setError] = useState('');
+  const [notification, setNotification] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [tempToken, setTempToken] = useState<string | null>(null);
@@ -36,9 +37,11 @@ export const LoginForm = () => {
   const handleResendVerification = async () => {
     try {
       setIsResending(true);
+      setError('');
+      setNotification('');
       const email = getValues('email');
       await authApi.resendVerificationEmail(email);
-      setError('Verification email sent. Please check your inbox.');
+      setNotification('Verification email sent. Please check your inbox.');
     } catch (err) {
       setError(handleApiError(err));
     } finally {
@@ -50,6 +53,7 @@ export const LoginForm = () => {
     try {
       setIsLoading(true);
       setError('');
+      setNotification('');
       const response = await authApi.login(data);
       
       // Check if 2FA is required
@@ -91,6 +95,11 @@ export const LoginForm = () => {
           gap: 3
         }}
       >
+        {notification && (
+          <Alert severity='success' sx={{width: '100%'}}>
+            {notification}
+          </Alert>
+        )}
         {error && (
           <Alert severity="error" sx={{width: '100%'}}>
             {error}
