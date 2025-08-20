@@ -32,6 +32,7 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/request-reset" element={<PasswordResetRequestPage />} />
             <Route path="reset-password" element={<ResetPasswordPage />} />
+            <Route path="/verify-email" element={<VerifyEmailPage />} />
 
             <Route path="/demo" element={<DemoDashboard />} /> 
 
@@ -39,9 +40,8 @@ function App() {
             <Route element={<PrivateRoute />}>
               <Route path='/dashboard' element={<DashboardPageHome />} />
               <Route path='/portfolio/:portfolioId' element={<PortfolioDashboard />} />
-              <Route path='settings' element={<SettingsPage />} />
+              <Route path='/settings' element={<SettingsPage />} />
               <Route path="/accounts" element={<AccountsPage />} />
-              <Route path="/verify-email" element={<VerifyEmailPage />} />
               <Route path="/watchlists" element={<WatchlistPage />} />
               <Route path="/watchlists/:watchlistId" element={<WatchlistDetailPage />} />
             </Route>
