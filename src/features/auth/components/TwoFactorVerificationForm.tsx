@@ -6,11 +6,11 @@ import {
   Container, TextField,
   Typography, Box, Paper
 } from '@mui/material';
-import { Verify2FADto } from '../../../types/auth';
+import { Verify2FADto } from '@/types/auth';
 import { useState } from 'react';
-import { authApi } from '../../../api/auth';
-import { handleApiError } from '../../../utils/errorHandler';
-import { useAuth } from '../../../hooks/useAuth';
+import { authApi } from '@/api/auth';
+import { handleApiError } from '@/utils/errorHandler';
+import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
@@ -26,7 +26,9 @@ interface TwoFactorVerificationFormProps {
   children?: React.ReactNode;
 }
 
-export const TwoFactorVerificationForm = ({ tempToken, onBack }: TwoFactorVerificationFormProps) => {
+export const TwoFactorVerificationForm = (
+  { tempToken, onBack }: TwoFactorVerificationFormProps
+) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 

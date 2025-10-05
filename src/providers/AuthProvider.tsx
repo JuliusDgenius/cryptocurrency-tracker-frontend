@@ -105,9 +105,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { data }: { data: RegisterApiResponse } = await api.post('/auth/register', registerData);
     console.log('User registered:', data);
 
-    // Try logging user immediately after registration
+    // Store tokens
     localStorage.setItem('accessToken', data.tokens.accessToken);
     localStorage.setItem('refreshToken', data.tokens.refreshToken);
+
+    // Set user state and user roles
     setUser(data.user); // Triggers re-render
     setUserRoles(data.user.roles || []);
 
@@ -141,9 +143,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       try {
         await refreshUser();
-        console.log('Auth check successful via /auth/me');
       } catch (error) {
-        console.log('/auth/me failed, trying refresh...');
         try {
           // Attempt token refresh if initial check fails
           const { data: tokens } = await authApi.refreshToken();
@@ -174,7 +174,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // useEffect for logout event synchronization
   useEffect(() => {
     const handleLogoutEvent = () => {
-      console.log('Received authLogout event from interceptor');
       logout();
     };
     

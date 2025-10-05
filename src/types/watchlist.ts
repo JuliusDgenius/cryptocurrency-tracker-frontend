@@ -10,6 +10,7 @@ export interface Watchlist {
 }
 
 export interface WatchlistAsset {
+  id?: string;
   symbol: string;
   name: string;
   currentPrice: number;

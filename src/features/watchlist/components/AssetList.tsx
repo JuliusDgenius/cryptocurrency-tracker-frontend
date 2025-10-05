@@ -41,14 +41,14 @@ const AssetList: React.FC<AssetListProps> = ({
   onAssetRemoved
 }) => {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
-  const [showDeleteDialog, setShowDeleteDialog] = useState<{ symbol: string; name: string } | null>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState<{ assetId: string; symbol: string; name: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleDelete = async (symbol: string) => {
+  const handleDelete = async (assetId: string) => {
     try {
-      setIsDeleting(symbol);
+      setIsDeleting(assetId);
       setError(null);
-      await watchlistService.removeAssetFromWatchlist(watchlistId, symbol);
+      await watchlistService.removeAssetFromWatchlist(watchlistId, assetId);
       onAssetRemoved();
     } catch (err: any) {
       setError(err.message || 'Failed to remove asset');
@@ -59,17 +59,40 @@ const AssetList: React.FC<AssetListProps> = ({
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(price);
+    try {
+      if (typeof price !== 'number' || isNaN(price)) {
+        return '$0.00';
+      }
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(price);
+    } catch (error) {
+      console.error('Error formatting price:', price, error);
+      return '$0.00';
+    }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
+    try {
+      if (!dateString) return 'N/A';
+      return new Date(dateString).toLocaleDateString();
+    } catch (error) {
+      console.error('Error formatting date:', dateString, error);
+      return 'Invalid Date';
+    }
   };
+
+  console.log("Assets in AssetList component:", assets);
+  console.log("Asset structure check:", assets.map(asset => ({
+    id: asset.id,
+    symbol: asset.symbol,
+    name: asset.name,
+    currentPrice: asset.currentPrice,
+    addedAt: asset.addedAt
+  })));
 
   if (assets.length === 0) {
     return (
@@ -116,7 +139,7 @@ const AssetList: React.FC<AssetListProps> = ({
               <TableBody>
                 {assets.map((asset) => (
                   <TableRow 
-                    key={asset.symbol}
+                    key={asset.id}
                     sx={{ 
                       '&:hover': { backgroundColor: 'action.hover' },
                       opacity: isDeleting === asset.symbol ? 0.6 : 1
@@ -149,10 +172,10 @@ const AssetList: React.FC<AssetListProps> = ({
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
-                        onClick={() => setShowDeleteDialog({ symbol: asset.symbol, name: asset.name })}
+                        onClick={() => setShowDeleteDialog({ assetId: asset.id || '', symbol: asset.symbol, name: asset.name })}
                         size="small"
                         color="error"
-                        disabled={isDeleting === asset.symbol}
+                        disabled={isDeleting === asset.id}
                         title="Remove from watchlist"
                       >
                         <DeleteIcon fontSize="small" />
@@ -190,7 +213,7 @@ const AssetList: React.FC<AssetListProps> = ({
             Cancel
           </Button>
           <Button 
-            onClick={() => showDeleteDialog && handleDelete(showDeleteDialog.symbol)} 
+            onClick={() => showDeleteDialog && handleDelete(showDeleteDialog.assetId)} 
             color="error" 
             variant="contained"
             disabled={!!isDeleting}

@@ -44,7 +44,20 @@ const WatchlistDetailPage = () => {
       setLoading(true);
       setError(null);
       const data = await watchlistService.getWatchlistById(watchlistId);
-      setWatchlist(data);
+      
+      // Transform the data to match the expected frontend structure
+      const transformedData = {
+        ...data,
+        items: data.items?.map((item: any) => ({
+          id: item.asset?.id || item.id,
+          symbol: item.asset?.symbol || '',
+          name: item.asset?.name || '',
+          currentPrice: item.asset?.currentPrice || 0,
+          addedAt: item.createdAt || item.addedAt || new Date().toISOString()
+        })) || []
+      };
+      
+      setWatchlist(transformedData);
     } catch (err: any) {
       setError(err.message || 'Failed to load watchlist');
     } finally {
