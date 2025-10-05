@@ -12,7 +12,7 @@ export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [prices, setPrices] = useState<PriceUpdate[]>([]);
 
   useEffect(() => {
-    const url = new URL(`${import.meta.env.VITE_API_URL}/api/stream/prices`);
+    const url = new URL(`${import.meta.env.VITE_API_URL}/stream/prices`);
     const eventSource = new EventSource(url.toString());
 
     eventSource.onmessage = (event) => {
