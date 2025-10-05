@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 export interface PriceUpdate {
   symbol: string;
@@ -13,8 +14,15 @@ export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("AccessToken")
     const url = new URL(`${import.meta.env.VITE_API_URL}/api/stream/prices`);
-    const eventSource = new EventSource(url.toString());
+    const eventSource = new EventSourcePolyfill(url.toString(), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
 
     eventSource.onmessage = (event) => {
       setError(null);
