@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
-  Box, Tabs, Tab, Button, Typography, CircularProgress, Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton
+  Box, Tabs, Tab, Button, Typography, CircularProgress, Alert,
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddExchangeDialog from './AddExchangeDialog';
@@ -17,7 +18,6 @@ const AccountsPage = () => {
   const [addWalletOpen, setAddWalletOpen] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  // Initial load
   useEffect(() => {
     setLoading(true);
     Promise.all([
@@ -87,25 +87,59 @@ const AccountsPage = () => {
   };
 
   return (
-    <Box sx={{ p: { xs: 2, md: 4 } }}>
-      <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>Connected Accounts</Typography>
-      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 3 }}>
+    <Box
+      sx={{
+        p: { xs: 2, md: 4 },
+        mt: { xs: 8, md: 10 }, // ✅ Offset for fixed Navbar
+      }}
+    >
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 3,
+          fontWeight: 700,
+          fontSize: { xs: '1.6rem', sm: '2rem' },
+          textAlign: { xs: 'center', sm: 'left' },
+        }}
+      >
+        Connected Accounts
+      </Typography>
+
+      <Tabs
+        value={tab}
+        onChange={(_, v) => setTab(v)}
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{ mb: 3 }}
+      >
         <Tab label="Exchanges" />
         <Tab label="Wallets" />
       </Tabs>
+
       {loading ? (
-        <CircularProgress />
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <CircularProgress />
+        </Box>
       ) : error ? (
         <Alert severity="error">{error}</Alert>
       ) : (
         <>
           {tab === 0 && (
             <Box>
-              <Button variant="contained" sx={{ mb: 2 }} onClick={() => setAddExchangeOpen(true)}>
+              <Button
+                variant="contained"
+                sx={{ mb: 2 }}
+                onClick={() => setAddExchangeOpen(true)}
+              >
                 Add Exchange
               </Button>
-              <TableContainer component={Paper}>
-                <Table>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  overflowX: 'auto', // ✅ Enables horizontal scroll on small screens
+                }}
+              >
+                <Table size="small">
                   <TableHead>
                     <TableRow>
                       <TableCell>Exchange</TableCell>
@@ -119,7 +153,11 @@ const AccountsPage = () => {
                       <TableRow key={ex.id}>
                         <TableCell>{ex.exchange}</TableCell>
                         <TableCell>{ex.name || ex.label}</TableCell>
-                        <TableCell>{ex.lastSync ? new Date(ex.lastSync).toLocaleString() : 'Never'}</TableCell>
+                        <TableCell>
+                          {ex.lastSync
+                            ? new Date(ex.lastSync).toLocaleString()
+                            : 'Never'}
+                        </TableCell>
                         <TableCell>
                           <IconButton onClick={() => handleDeleteExchange(ex.id)}>
                             <DeleteIcon />
@@ -132,13 +170,23 @@ const AccountsPage = () => {
               </TableContainer>
             </Box>
           )}
+
           {tab === 1 && (
             <Box>
-              <Button variant="contained" sx={{ mb: 2 }} onClick={() => setAddWalletOpen(true)}>
+              <Button
+                variant="contained"
+                sx={{ mb: 2 }}
+                onClick={() => setAddWalletOpen(true)}
+              >
                 Add Wallet
               </Button>
-              <TableContainer component={Paper}>
-                <Table>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  overflowX: 'auto',
+                }}
+              >
+                <Table size="small">
                   <TableHead>
                     <TableRow>
                       <TableCell>Blockchain</TableCell>
@@ -152,9 +200,21 @@ const AccountsPage = () => {
                     {wallets.map((wa) => (
                       <TableRow key={wa.id}>
                         <TableCell>{wa.blockchain}</TableCell>
-                        <TableCell sx={{ maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis' }}>{wa.address}</TableCell>
+                        <TableCell
+                          sx={{
+                            maxWidth: { xs: 120, sm: 200 },
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {wa.address}
+                        </TableCell>
                         <TableCell>{wa.label}</TableCell>
-                        <TableCell>{wa.lastSync ? new Date(wa.lastSync).toLocaleString() : 'Never'}</TableCell>
+                        <TableCell>
+                          {wa.lastSync
+                            ? new Date(wa.lastSync).toLocaleString()
+                            : 'Never'}
+                        </TableCell>
                         <TableCell>
                           <IconButton onClick={() => handleDeleteWallet(wa.id)}>
                             <DeleteIcon />
@@ -169,11 +229,25 @@ const AccountsPage = () => {
           )}
         </>
       )}
-      {actionError && <Alert severity="error" sx={{ mt: 2 }}>{actionError}</Alert>}
-      <AddExchangeDialog open={addExchangeOpen} onClose={() => setAddExchangeOpen(false)} onAdd={handleAddExchange} />
-      <AddWalletDialog open={addWalletOpen} onClose={() => setAddWalletOpen(false)} onAdd={handleAddWallet} />
+
+      {actionError && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {actionError}
+        </Alert>
+      )}
+
+      <AddExchangeDialog
+        open={addExchangeOpen}
+        onClose={() => setAddExchangeOpen(false)}
+        onAdd={handleAddExchange}
+      />
+      <AddWalletDialog
+        open={addWalletOpen}
+        onClose={() => setAddWalletOpen(false)}
+        onAdd={handleAddWallet}
+      />
     </Box>
   );
 };
 
-export default AccountsPage; 
+export default AccountsPage;
