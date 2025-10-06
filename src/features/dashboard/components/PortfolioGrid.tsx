@@ -86,7 +86,9 @@ const PortfolioGrid = ({
     }
 
     try {
-      const updatedPortfolio = await dashboardService.updatePortfolio(editPortfolioId, editPortfolioName, editPortfolioDesc);
+      const updatedPortfolio = await dashboardService.updatePortfolio(
+        editPortfolioId, editPortfolioName, editPortfolioDesc
+      );
       onUpdate(updatedPortfolio);
       setSuccess('Portfolio updated successfully');
       setOpenEdit(false);
@@ -102,14 +104,21 @@ const PortfolioGrid = ({
     <>
       <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
         {portfolios.map((portfolio) => (
-          <Grid key={portfolio.id} item xs={12} sm={6} md={4} lg={3}>
+          <Grid 
+            key={portfolio.id} 
+            item xs={12} 
+            sm={6} md={4} 
+            lg={3}
+          >
             <Card
               onClick={() => navigate(`/portfolio/${portfolio.id}`)}
               sx={{ 
                 height: '100%', 
                 display: 'flex', 
                 flexDirection: 'column',
-                border: portfolio.isPrimary ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.12)',
+                border: portfolio.isPrimary ? 
+                  '2px solid #1976d2' : 
+                  '1px solid rgba(0, 0, 0, 0.12)',
                 position: 'relative',
                 cursor: 'pointer',
                 transition: 'box-shadow 0.2s, transform 0.2s',
@@ -135,7 +144,9 @@ const PortfolioGrid = ({
                 />
               )}
               
-              <CardContent sx={{ flexGrow: 1, p: { xs: 2, md: 3 } }}>
+              <CardContent 
+                sx={{ flexGrow: 1, p: { xs: 2, md: 3 } }}
+              >
                 <Box sx={{ 
                   display: 'flex', 
                   justifyContent: 'space-between',
@@ -160,7 +171,11 @@ const PortfolioGrid = ({
                   </IconButton>
                 </Box>
                 
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary" 
+                  sx={{ mb: 2 }}
+                >
                   {portfolio.description || 'No description'}
                 </Typography>
                 
@@ -186,29 +201,49 @@ const PortfolioGrid = ({
                   </div>
                   
                   <div>
-                    <Typography variant="body2" color="text.secondary" align="right">
+                    <Typography 
+                      variant="body2" 
+                      color="text.secondary" 
+                      align="right"
+                    >
                       24h Change
                     </Typography>
                     <Typography 
                       variant="h6" 
                       align="right"
                       sx={{ 
-                        color: portfolio.twentyFourHourChange !== undefined && portfolio.twentyFourHourChange >= 0 ? 
-                              '#4caf50' : '#f44336' 
+                        color: portfolio.twentyFourHourChange !== 
+                          undefined && portfolio.twentyFourHourChange >= 0 ? 
+                          '#4caf50' : 
+                          '#f44336' 
                       }}
                     >
-                      {portfolio?.profitLoss?.twentyFourHour !== undefined && portfolio?.profitLoss?.twentyFourHour >= 0 ? '+' : ''}
-                      {portfolio?.profitLoss?.twentyFourHour !== undefined ? portfolio?.profitLoss?.twentyFourHour.toFixed(2) : 'N/A'}%
+                      {portfolio?.profitLoss?.twentyFourHour !== 
+                        undefined && portfolio?.profitLoss?.twentyFourHour >= 
+                        0 ? '+' : ''
+                      }
+                      {portfolio?.profitLoss?.twentyFourHour !== 
+                        undefined ? 
+                        portfolio?.profitLoss?.twentyFourHour.toFixed(2) : 
+                        'N/A'}%
                     </Typography>
                   </div>
                 </Box>
                 
                 <Typography variant="caption" color="text.secondary">
-                  Created: {new Date(portfolio.createdAt).toLocaleDateString()}
+                  Created: {
+                    new Date(portfolio.createdAt).toLocaleDateString()
+                    }
                 </Typography>
               </CardContent>
               
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: { xs: 1, md: 2 }, gap: 1 }}>
+              <Box sx={{ 
+                  display: 'flex', 
+                  justifyContent: 'flex-end',
+                   p: { xs: 1, md: 2 }, 
+                   gap: 1 
+                   }}
+              >
                 <Button 
                   size="small" 
                   variant="outlined"
@@ -243,7 +278,11 @@ const PortfolioGrid = ({
       </Grid>
       
       {/* Create Portfolio Dialog */}
-      <Dialog open={openCreate} onClose={() => setOpenCreate(false)} fullWidth maxWidth="sm">
+      <Dialog 
+        open={openCreate} 
+        onClose={() => setOpenCreate(false)} 
+        fullWidth maxWidth="sm"
+      >
         <DialogTitle>Create New Portfolio</DialogTitle>
         <DialogContent>
           <TextField
@@ -279,7 +318,11 @@ const PortfolioGrid = ({
       </Dialog>
       
       {/* Delete Confirmation Dialog */}
-      <Dialog open={openDelete} onClose={() => setOpenDelete(false)} fullWidth maxWidth="xs">
+      <Dialog 
+        open={openDelete}
+        onClose={() => setOpenDelete(false)} 
+        fullWidth maxWidth="xs"
+      >
         <DialogTitle>Delete Portfolio</DialogTitle>
         <DialogContent>
           <Typography>
@@ -299,7 +342,11 @@ const PortfolioGrid = ({
       </Dialog>
       
       {/* Edit Portfolio Dialog */}
-      <Dialog open={openEdit} onClose={() => setOpenEdit(false)} fullWidth maxWidth="sm">
+      <Dialog 
+        open={openEdit} 
+        onClose={() => setOpenEdit(false)} 
+        fullWidth maxWidth="sm"
+      >
         <DialogTitle>Edit Portfolio</DialogTitle>
         <DialogContent>
           <TextField

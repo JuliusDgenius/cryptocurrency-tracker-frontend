@@ -84,6 +84,12 @@ const PortfolioSelector: React.FC<PortfolioSelectorProps> = ({
         startIcon={isLoading ? <CircularProgress size={20} /> : <AddIcon />}
         onClick={handleCreatePortfolio}
         disabled={isLoading}
+        sx={{
+          width: { xs: '100%', sm: 'auto' },
+          fontSize: { xs: '0.875rem', sm: '1rem' },
+          py: { xs: 1, sm: 1.5 },
+          px: { xs: 2, sm: 3 },
+        }}
       >
         New Portfolio
       </Button>

@@ -240,13 +240,46 @@ const PortfolioDashboard = () => {
           </Button>
         </Box>
       </Box>
-      
-      <PortfolioHeader 
-        portfolioName={portfolio.name}
-        totalValue={portfolio.totalValue}
-        twentyFourHourChange={portfolio?.profitLoss?.twentyFourHour}
-        profitLoss={portfolio.profitLoss}
-      />
+
+      <Box 
+        sx={{ 
+          mb: 3, mt: 10, 
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' }, 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          gap: { xs: 2, sm: 0 }
+        }}>
+        <PortfolioHeader 
+          portfolioName={portfolio.name}
+          totalValue={portfolio.totalValue}
+          twentyFourHourChange={portfolio?.profitLoss?.twentyFourHour}
+          profitLoss={portfolio.profitLoss}
+        />
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => setIsAddAssetOpen(true)}
+        >
+          Add Asset
+        </Button>
+      </Box>
+
+      {/* Live Prices Section */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h6">Live Prices</Typography>
+        <Box component="ul" sx={{ pl: 2 }}>
+          {prices.length === 0 ? (
+            <Typography variant="body2">No live prices available.</Typography>
+          ) : (
+            prices.map((p) => (
+              <li key={p.symbol}>
+                <strong>{p.symbol}:</strong> {p.price} (at {new Date(p.timestamp).toLocaleTimeString()})
+              </li>
+            ))
+          )}
+        </Box>
+      </Box>
       
       {/* Timeframe Selector */}
       <Tabs 
@@ -283,10 +316,11 @@ const PortfolioDashboard = () => {
         sx={{ 
           mb: 4,
           '& .MuiTab-root': {
+            scrollSnapAlign: 'start',
             minWidth: { xs: '100px', sm: '120px' },
             fontSize: { xs: '0.875rem', sm: '1rem' },
             py: { xs: 1, sm: 1.5 }
-          }
+          },
         }}
       >
         <Tab label="Overview" />
@@ -606,17 +640,6 @@ const PortfolioDashboard = () => {
         </Alert>
       </Snackbar>
 
-      <Box sx={{ mb: 3, mt: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4">Portfolio Dashboard</Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => setIsAddAssetOpen(true)}
-        >
-          Add Asset
-        </Button>
-      </Box>
-
       <AddAssetDialog
         open={isAddAssetOpen}
         onClose={() => setIsAddAssetOpen(false)}
@@ -628,22 +651,6 @@ const PortfolioDashboard = () => {
           refetchAssetDistribution();
         }}
       />
-
-      {/* Live Prices Section */}
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Live Prices</Typography>
-        <Box component="ul" sx={{ pl: 2 }}>
-          {prices.length === 0 ? (
-            <Typography variant="body2">No live prices available.</Typography>
-          ) : (
-            prices.map((p) => (
-              <li key={p.symbol}>
-                <strong>{p.symbol}:</strong> {p.price} (at {new Date(p.timestamp).toLocaleTimeString()})
-              </li>
-            ))
-          )}
-        </Box>
-      </Box>
     </Container>
   );
 };
