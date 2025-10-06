@@ -21,9 +21,9 @@ const DashboardHome = () => {
   useEffect(() => {
     const fetchPortfolios = async () => {
       try {
-        setLoading(true);
         const data = await dashboardService.getPortfolios();
         setPortfolios(data);
+        setLoading(false);
       } catch (err) {
         setError('Failed to load portfolios. Please try again later.');
       } finally {
@@ -36,11 +36,14 @@ const DashboardHome = () => {
 
   const handleCreatePortfolio = async (name: string, description: string = '') => {
     try {
+      setLoading(true);
       const newPortfolio = await dashboardService.createPortfolio(name, description);
       setPortfolios([...portfolios, newPortfolio]);
       setOpenCreateDialog(false);
     } catch (err) {
       setError('Failed to create portfolio. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
