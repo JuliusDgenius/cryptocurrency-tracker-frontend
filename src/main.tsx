@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <AuthProvider>
         <PriceStreamProvider>
           <App />
-          </PriceStreamProvider>
+        </PriceStreamProvider>
         </AuthProvider>
       </ErrorProvider>
     </CustomThemeProvider>
