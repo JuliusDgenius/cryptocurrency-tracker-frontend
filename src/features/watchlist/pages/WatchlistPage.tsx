@@ -65,7 +65,7 @@ const WatchlistPage = () => {
         maxWidth="lg"
         sx={{
           py: { xs: 4, md: 6 },
-          mt: { xs: 8, md: 10 } // ✅ Offset for fixed Navbar
+          mt: { xs: 8, md: 10 } // Offset for fixed Navbar
         }}
       >
         <Box
@@ -87,7 +87,7 @@ const WatchlistPage = () => {
       maxWidth="lg"
       sx={{
         py: { xs: 4, md: 6 },
-        mt: { xs: 8, md: 10 } // ✅ Offset for fixed Navbar
+        mt: { xs: 8, md: 10 } // Offset for fixed Navbar
       }}
     >
       <Box

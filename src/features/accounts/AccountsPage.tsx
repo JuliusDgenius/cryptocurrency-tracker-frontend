@@ -90,7 +90,7 @@ const AccountsPage = () => {
     <Box
       sx={{
         p: { xs: 2, md: 4 },
-        mt: { xs: 8, md: 10 }, // ✅ Offset for fixed Navbar
+        mt: { xs: 8, md: 10 }, // Offset for fixed Navbar
       }}
     >
       <Typography

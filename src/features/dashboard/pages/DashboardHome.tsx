@@ -83,18 +83,43 @@ const DashboardHome = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ pt: { xs: 6, md: 10 }, px: { xs: 1, sm: 2, md: 4 }, pb: { xs: 3, md: 6 } }}>
+    <Container 
+      maxWidth="xl" 
+      sx={{ 
+        pt: { xs: 6, md: 10 }, 
+        px: { xs: 1, sm: 2, md: 4 }, 
+        pb: { xs: 3, md: 6 },
+        mt: { xs: 4, md: 6 }
+      }}>
       <Box sx={{ mb: { xs: 3, md: 4 } }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '2rem', md: '2.5rem' } }}>
+        <Typography 
+          variant="h4" 
+          component="h1" 
+          gutterBottom 
+          sx={{ 
+            fontWeight: 700, 
+            fontSize: { xs: '2rem', md: '2.5rem' } 
+          }}>
           Welcome back, {user?.name || 'User'}!
         </Typography>
-        <Typography variant="subtitle1" sx={{ color: 'text.secondary', fontSize: { xs: '1rem', md: '1.25rem' } }}>
+        <Typography 
+          variant="subtitle1" 
+          sx={{ 
+            color: 'text.secondary', 
+            fontSize: { xs: '1rem', md: '1.25rem' } 
+          }}>
           Manage your cryptocurrency portfolios
         </Typography>
       </Box>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 3, fontSize: { xs: '0.95rem', md: '1rem' } }} onClose={() => setError(null)}>
+        <Alert 
+          severity="error"
+           sx={{ 
+            mb: 3, 
+            fontSize: { xs: '0.95rem', md: '1rem' } 
+            }} 
+            onClose={() => setError(null)}>
           {error}
         </Alert>
       )}
@@ -110,17 +135,33 @@ const DashboardHome = () => {
           mx: 'auto',
           maxWidth: 500
         }}>
-          <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, fontSize: { xs: '1.2rem', md: '1.5rem' } }}>
+          <Typography 
+            variant="h5" 
+            gutterBottom 
+            sx={{ 
+              fontWeight: 600, 
+              fontSize: { xs: '1.2rem', md: '1.5rem' } 
+            }}>
             No portfolios yet
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3, fontSize: { xs: '0.95rem', md: '1.1rem' } }}>
+          <Typography 
+            variant="body1" 
+            color="text.secondary" 
+            sx={{ 
+              mb: 3, fontSize: { xs: '0.95rem', md: '1.1rem' } 
+            }}>
             Create your first portfolio to start tracking your cryptocurrency investments
           </Typography>
           <Button 
             variant="contained" 
             color="primary"
             onClick={() => setOpenCreateDialog(true)}
-            sx={{ mr: { xs: 0, sm: 2 }, mb: { xs: 2, sm: 0 }, px: 4, py: 1.5, fontSize: { xs: '1rem', md: '1.1rem' } }}
+            sx={{ 
+              mr: { xs: 0, sm: 2 },
+               mb: { xs: 2, sm: 0 },
+                px: 4, py: 1.5, 
+                fontSize: { xs: '1rem', md: '1.1rem' } 
+              }}
           >
             Create Portfolio
           </Button>
@@ -135,8 +176,24 @@ const DashboardHome = () => {
         </Box>
       ) : (
         <>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'stretch', sm: 'center' }, mb: 3, gap: 2 }}>
-            <Typography variant="h6" sx={{ fontWeight: 600, fontSize: { xs: '1.1rem', md: '1.3rem' } }}>Your Portfolios</Typography>
+          <Box sx={{
+             display: 'flex', 
+             flexDirection: { xs: 'column', sm: 'row' }, 
+             justifyContent: 'space-between', 
+             alignItems: { 
+              xs: 'stretch', 
+              sm: 'center' 
+              },
+               mb: 3, gap: 2 
+               }}>
+            <Typography 
+              variant="h6" 
+              sx={{ fontWeight: 600, 
+              fontSize: { xs: '1.1rem', md: '1.3rem' } 
+              }}
+              >
+                Your Portfolios
+              </Typography>
             <Button 
               variant="outlined"
               onClick={() => setOpenCreateDialog(true)}
