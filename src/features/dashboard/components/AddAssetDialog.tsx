@@ -30,7 +30,10 @@ const AddAssetDialog: React.FC<AddAssetDialogProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch available cryptocurrencies
-  const { data: cryptoOptions, isLoading: isLoadingCrypto } = useQuery({
+  const { 
+    data: cryptoOptions, 
+    isLoading: isLoadingCrypto 
+  } = useQuery({
     queryKey: ['availableCryptos'],
     queryFn: () => dashboardService.getAvailableCryptos(),
     enabled: open
@@ -42,12 +45,18 @@ const AddAssetDialog: React.FC<AddAssetDialogProps> = ({
       return;
     }
 
-    if (!quantity || isNaN(Number(quantity)) || Number(quantity) <= 0) {
+    if (
+      !quantity || 
+      isNaN(Number(quantity)) || 
+      Number(quantity) <= 0) {
       setError('Please enter a valid quantity');
       return;
     }
 
-    if (!averageBuyPrice || isNaN(Number(averageBuyPrice)) || Number(averageBuyPrice) <= 0) {
+    if (
+      !averageBuyPrice || 
+      isNaN(Number(averageBuyPrice)) || 
+      Number(averageBuyPrice) <= 0) {
       setError('Please enter a valid average buy price');
       return;
     }
@@ -93,7 +102,8 @@ const AddAssetDialog: React.FC<AddAssetDialogProps> = ({
       <DialogContent>
         <Box sx={{ mb: 3 }}>
           <Typography variant="body1" color="text.secondary">
-            Add a new cryptocurrency asset to your portfolio. You can specify the quantity and average buy price.
+            Add a new cryptocurrency asset to your portfolio. 
+            You can specify the quantity and average buy price.
           </Typography>
         </Box>
 
@@ -120,7 +130,9 @@ const AddAssetDialog: React.FC<AddAssetDialogProps> = ({
                 ...params.InputProps,
                 endAdornment: (
                   <>
-                    {isLoadingCrypto ? <CircularProgress color="inherit" size={20} /> : null}
+                    {
+                    isLoadingCrypto ? 
+                    <CircularProgress color="inherit" size={20} /> : null}
                     {params.InputProps.endAdornment}
                   </>
                 ),
@@ -170,7 +182,8 @@ const AddAssetDialog: React.FC<AddAssetDialogProps> = ({
             </Typography>
             {quantity && averageBuyPrice && (
               <Typography variant="body2" color="text.secondary">
-                Estimated Value: ${(Number(quantity) * selectedCrypto.currentPrice).toLocaleString()}
+                Estimated Value: ${(Number(quantity) * 
+                  selectedCrypto.currentPrice).toLocaleString()}
               </Typography>
             )}
           </Box>
@@ -181,7 +194,10 @@ const AddAssetDialog: React.FC<AddAssetDialogProps> = ({
         <Button 
           variant="contained" 
           onClick={handleSubmit}
-          disabled={isSubmitting || !selectedCrypto || !quantity || !averageBuyPrice}
+          disabled={isSubmitting || 
+            !selectedCrypto || 
+            !quantity || 
+            !averageBuyPrice}
         >
           {isSubmitting ? <CircularProgress size={24} /> : 'Add Asset'}
         </Button>

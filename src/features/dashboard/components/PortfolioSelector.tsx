@@ -29,8 +29,6 @@ const PortfolioSelector: React.FC<PortfolioSelectorProps> = ({
     try {
       setIsLoading(true);
       setError(null);
-      // TODO: Implement portfolio creation
-      console.log('Create new portfolio');
     } catch (err) {
       console.error('Failed to create portfolio:', err);
       setError('Failed to create portfolio');
@@ -86,6 +84,7 @@ const PortfolioSelector: React.FC<PortfolioSelectorProps> = ({
         disabled={isLoading}
         sx={{
           width: { xs: '100%', sm: 'auto' },
+          whiteSpace: 'nowrap',
           fontSize: { xs: '0.875rem', sm: '1rem' },
           py: { xs: 1, sm: 1.5 },
           px: { xs: 2, sm: 3 },

@@ -43,9 +43,14 @@ const dashboardService = {
     }
   },
 
-  async createPortfolio(name: string, description: string = ''): Promise<Portfolio> {
+  async createPortfolio(
+    name: string, 
+    description: string = ''
+  ): Promise<Portfolio> {
     try {
-      const response = await api.post('/portfolio/create', { name, description });
+      const response = await api.post(
+        '/portfolio/create', { name, description }
+      );
       return response.data.portfolio;
     } catch (error) {
       throw new Error('Failed to create portfolio');
@@ -60,9 +65,13 @@ const dashboardService = {
     }
   },
 
-  async getPortfolioSummary(portfolioId: string, timeframe: string): Promise<PortfolioSummaryData> {
+  async getPortfolioSummary(
+    portfolioId: string, timeframe: string
+  ): Promise<PortfolioSummaryData> {
     try {
-      console.log(`Fetching portfolio summary for portfolio ${portfolioId} with timeframe ${timeframe}`);
+      console.log(
+        `Fetching portfolio summary for portfolio ${portfolioId} with timeframe ${timeframe}`
+      );
       const response = await api.get(`/portfolio/${portfolioId}/metrics`, {
         params: { timeframe }
       });
@@ -80,13 +89,17 @@ const dashboardService = {
       console.error('Error fetching portfolio summary:', error);
       if (error.response) {
         console.error('Error response:', error.response.data);
-        throw new Error(`Failed to fetch portfolio summary: ${error.response.data.message || 'Unknown error'}`);
+        throw new Error(
+          `Failed to fetch portfolio summary: ${error.response.data.message || 'Unknown error'}`
+        );
       }
       throw new Error('Failed to fetch portfolio summary: Network error');
     }
   },
 
-  async getAssetDistribution(portfolioId: string): Promise<AssetDistributionData[]> {
+  async getAssetDistribution(
+    portfolioId: string
+  ): Promise<AssetDistributionData[]> {
     try {
       const response = await api.get(`/portfolio/${portfolioId}/assets`);
       console.log('Assets response:', response.data)
@@ -96,9 +109,12 @@ const dashboardService = {
     }
   },
 
-  async getRecentActivity(portfolioId: string): Promise<RecentActivityData[]> {
+  async getRecentActivity(
+    portfolioId: string
+  ): Promise<RecentActivityData[]> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/transaction/transactions`, {
+      const response = await api.get(
+        `/portfolio/${portfolioId}/transaction/transactions`, {
         params: {
           page: 1,
           limit: 10,
@@ -121,31 +137,42 @@ const dashboardService = {
     }
   },
 
-  async getPerformanceData(portfolioId: string, timeframe: string): Promise<any> {
+  async getPerformanceData(
+    portfolioId: string, timeframe: string): Promise<any> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/performance?timeframe=${timeframe}`);
+      const response = await api.get(
+        `/portfolio/${portfolioId}/performance?timeframe=${timeframe}`);
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch performance data');
     }
   },
 
-  async getPortfolioHealth(portfolioId: string): Promise<PortfolioHealthMetrics> {
+  async getPortfolioHealth(
+    portfolioId: string
+  ): Promise<PortfolioHealthMetrics> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/health`);
+      const response = await api.get(
+        `/portfolio/${portfolioId}/health`
+      );
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch portfolio health metrics');
     }
   },
 
-  async getRiskAnalysis(portfolioId: string): Promise<RiskAnalysisData> {
+  async getRiskAnalysis(
+    portfolioId: string
+  ): Promise<RiskAnalysisData> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/risk-analysis`);
+      const response = await api.get(
+        `/portfolio/${portfolioId}/risk-analysis`
+      );
       const data = response.data;
       
       // Transform risk levels to numeric values
-      type RiskLevel = 'LOW' | 'MODERATE' | 'MODERATE_HIGH' | 'HIGH' | 'VERY_HIGH';
+      type RiskLevel = 'LOW' | 'MODERATE' | 'MODERATE_HIGH' |
+        'HIGH' | 'VERY_HIGH';
       const riskLevelMap: Record<RiskLevel, number> = {
         'LOW': 20,
         'MODERATE': 40,
@@ -165,7 +192,9 @@ const dashboardService = {
         liquidityRisk: riskLevelMap[data.liquidityRisk as RiskLevel] || 0,
         concentrationRisk: riskLevelMap[data.concentrationRisk as RiskLevel] || 0,
         marketRisk: riskLevelMap[data.marketRisk as RiskLevel] || 0,
-        stressTestResults: (data.stressTestResults as StressTestResult[]).map(test => ({
+        stressTestResults: (
+          data.stressTestResults as StressTestResult[]
+          ).map(test => ({
           scenario: test.scenario,
           portfolioImpact: test.impact
         }))
@@ -175,9 +204,13 @@ const dashboardService = {
     }
   },
 
-  async getCorrelationMatrix(portfolioId: string): Promise<CorrelationMatrixData> {
+  async getCorrelationMatrix(
+    portfolioId: string
+  ): Promise<CorrelationMatrixData> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/correlation-matrix`);
+      const response = await api.get(
+        `/portfolio/${portfolioId}/correlation-matrix`
+      );
       const matrix = response.data;
       
       // Transform the matrix into the expected format
@@ -203,31 +236,47 @@ const dashboardService = {
     }
   },
   
-  async generateReport(portfolioId: string, reportType: string): Promise<any> {
+  async generateReport(
+    portfolioId: string, reportType: string
+  ): Promise<any> {
     try {
-      const response = await api.get(`/portfolio/${portfolioId}/reports/${reportType}`);
+      const response = await api.get(
+        `/portfolio/${portfolioId}/reports/${reportType}`
+      );
       return response.data;
     } catch (error) {
       throw new Error('Failed to generate report');
     }
   },
 
-  async updatePortfolio(portfolioId: string, name: string, description: string): Promise<Portfolio> {
-    const response = await api.patch(`/portfolio/${portfolioId}`, { name, description });
+  async updatePortfolio(
+    portfolioId: string, name: string, description: string
+  ): Promise<Portfolio> {
+    const response = await api.patch(
+      `/portfolio/${portfolioId}`, { name, description }
+    );
     return response.data;
   },
 
-  async addAssetToPortfolio(portfolioId: string, asset: AddAssetRequest): Promise<void> {
-    const response = await api.post(`/portfolio/${portfolioId}/assets`, asset);
+  async addAssetToPortfolio(
+    portfolioId: string, asset: AddAssetRequest
+  ): Promise<void> {
+    const response = await api.post(
+      `/portfolio/${portfolioId}/assets`, asset
+    );
     return response.data;
   },
 
-  async getAvailableCryptos(): Promise<Array<{ symbol: string; name: string; currentPrice: number }>> {
+  async getAvailableCryptos(): Promise<Array<{ 
+    symbol: string; name: string; currentPrice: number 
+  }>> {
     const response = await api.get('/prices/available');
     return response.data;
   },
 
-  async deleteAsset(portfolioId: string, assetId: string): Promise<void> {
+  async deleteAsset(
+    portfolioId: string, assetId: string
+  ): Promise<void> {
     try {
       await api.delete(`/portfolio/${portfolioId}/assets/${assetId}`);
     } catch (error) {
@@ -244,7 +293,10 @@ const dashboardService = {
     }
   },
 
-  async addExchangeAccount(data: { exchange: string; apiKey: string; apiSecret: string; label: string }): Promise<any> {
+  async addExchangeAccount(
+    data: { 
+      exchange: string; apiKey: string; apiSecret: string; label: string 
+    }): Promise<any> {
     try {
       const response = await api.post('/exchange-accounts/exchange', data);
       return response.data;
@@ -270,9 +322,14 @@ const dashboardService = {
     }
   },
 
-  async addWalletAddress(data: { blockchain: string; address: string; label?: string }): Promise<any> {
+  async addWalletAddress(
+    data: { blockchain: string; address: string; label?: string 
+
+    }): Promise<any> {
     try {
-      const response = await api.post('/wallet-addresses/create-wallet', data);
+      const response = await api.post(
+        '/wallet-addresses/create-wallet', data
+      );
       return response.data;
     } catch (error) {
       throw new Error('Failed to add wallet address');
