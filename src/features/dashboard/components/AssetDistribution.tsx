@@ -24,7 +24,9 @@ interface AssetItemProps {
   onDelete: (asset: AssetDistributionData) => void;
 }
 
-const AssetItem: FC<AssetItemProps> = ({ asset, detailedView, onDelete }) => {
+const AssetItem: FC<AssetItemProps> = (
+  { asset, detailedView, onDelete }
+) => {
   const theme = useTheme();
 
   return (
@@ -44,10 +46,18 @@ const AssetItem: FC<AssetItemProps> = ({ asset, detailedView, onDelete }) => {
               'success.main' : 'error.main'
           }} />
           <Box>
-            <Typography variant="body1" component="span" fontWeight="medium">
+            <Typography 
+              variant="body1" 
+              component="span" 
+              fontWeight="medium"
+            >
               {asset.name}
             </Typography>
-            <Typography variant="body2" component="span" color="text.secondary" ml={1}>
+            <Typography 
+              variant="body2" 
+              component="span" 
+              color="text.secondary" ml={1}
+            >
               {asset.symbol}
             </Typography>
           </Box>
@@ -118,7 +128,8 @@ const AssetItem: FC<AssetItemProps> = ({ asset, detailedView, onDelete }) => {
             Current Price: ${asset.currentPrice.toLocaleString()}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Profit/Loss: ${asset.profitLoss.toLocaleString()} ({asset.profitLossPercentage.toFixed(2)}%)
+            Profit/Loss: ${asset.profitLoss.toLocaleString()} (
+              {asset.profitLossPercentage.toFixed(2)}%)
           </Typography>
         </Box>
       )}
@@ -133,10 +144,12 @@ const AssetDistribution: FC<AssetDistributionProps> = ({
   detailedView = false,
   onAssetDeleted
 }) => {
-  const [assets, setAssets] = useState<AssetDistributionData[]>(initialAssets || []);
+  const [assets, setAssets] = useState<AssetDistributionData[]>(
+    initialAssets || []);
   const [isLoading, setIsLoading] = useState(!demoMode);
   const [error, setError] = useState<string | null>(null);
-  const [assetToDelete, setAssetToDelete] = useState<AssetDistributionData | null>(null);
+  const [assetToDelete, setAssetToDelete] = 
+    useState<AssetDistributionData | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
@@ -186,7 +199,12 @@ const AssetDistribution: FC<AssetDistributionProps> = ({
 
   if (isLoading) {
     return (
-      <Card sx={{ p: 3, height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Card sx={{ 
+        p: 3, height: '100%', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center' }}
+      >
         <CircularProgress />
       </Card>
     );
@@ -261,7 +279,8 @@ const AssetDistribution: FC<AssetDistributionProps> = ({
         </DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete {assetToDelete?.name} ({assetToDelete?.symbol})?
+            Are you sure you want to delete {assetToDelete?.name} (
+              {assetToDelete?.symbol})?
             This action cannot be undone.
           </Typography>
         </DialogContent>

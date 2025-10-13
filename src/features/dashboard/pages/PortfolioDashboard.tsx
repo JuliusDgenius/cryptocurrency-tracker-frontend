@@ -32,14 +32,16 @@ const PortfolioDashboard = () => {
 
   const refetchPortfolio = async () => {
     if (portfolioId) {
-      const portfolioData = await dashboardService.getPortfolioDetails(portfolioId);
+      const portfolioData = await dashboardService.getPortfolioDetails(
+        portfolioId);
       setPortfolio(portfolioData);
     }
   };
 
   const refetchAssetDistribution = async () => {
     if (portfolioId) {
-      const portfolioData = await dashboardService.getPortfolioDetails(portfolioId);
+      const portfolioData = await dashboardService.getPortfolioDetails(
+        portfolioId);
       setPortfolio(portfolioData);
     }
   };
@@ -62,7 +64,8 @@ const PortfolioDashboard = () => {
         
         // Fetch portfolio details
         if (portfolioId) {
-          const portfolioData = await dashboardService.getPortfolioDetails(portfolioId);
+          const portfolioData = await dashboardService.getPortfolioDetails(
+            portfolioId);
           setPortfolio(portfolioData);
           
           await dashboardService.getPortfolioHealth(portfolioId);
@@ -145,7 +148,9 @@ const PortfolioDashboard = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ pt: { xs: 1, sm: 2 }, pb: { xs: 3, sm: 6 } }}>
+    <Container 
+      maxWidth="xl"
+      sx={{ pt: { xs: 1, sm: 2 }, pb: { xs: 3, sm: 6 } }}>
       {/* Portfolio Header and Navigation */}
       <Box sx={{ 
         display: 'flex', 
@@ -494,7 +499,7 @@ const PortfolioDashboard = () => {
               <RiskAnalysis portfolioId={portfolioId || ''} />
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs=  {12} md={6}>
             <Box sx={{ 
               bgcolor: 'background.paper', 
               borderRadius: 2, 

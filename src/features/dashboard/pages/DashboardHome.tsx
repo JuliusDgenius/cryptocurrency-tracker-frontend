@@ -34,10 +34,14 @@ const DashboardHome = () => {
     fetchPortfolios();
   }, []);
 
-  const handleCreatePortfolio = async (name: string, description: string = '') => {
+  const handleCreatePortfolio = async (
+    name: string, description: string = ''
+  ) => {
     try {
       setLoading(true);
-      const newPortfolio = await dashboardService.createPortfolio(name, description);
+      const newPortfolio = await dashboardService.createPortfolio(
+        name, description
+      );
       setPortfolios([...portfolios, newPortfolio]);
       setOpenCreateDialog(false);
     } catch (err) {
@@ -69,7 +73,9 @@ const DashboardHome = () => {
   };
 
   const handleUpdatePortfolio = async (updatedPortfolio: Portfolio) => {
-    setPortfolios(portfolios.map(p => p.id === updatedPortfolio.id ? updatedPortfolio : p));
+    setPortfolios(
+      portfolios.map(p => p.id === updatedPortfolio.id ? updatedPortfolio : p)
+    );
   };
 
   if (loading) {

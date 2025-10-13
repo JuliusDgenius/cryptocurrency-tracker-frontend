@@ -11,9 +11,13 @@ const CONNECTION_TIMEOUT_MS = 60000;
 
 export const PriceStreamContext = createContext<PriceUpdate[]>([]);
 
-export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = (
+  { children }
+) => {
   // Use a map for efficient lookups and updates
-  const [priceMap, setPriceMap] = useState<Map<string, PriceUpdate>>(new Map());
+  const [priceMap, setPriceMap] = useState<Map<string, PriceUpdate>>(
+    new Map()
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -32,9 +36,15 @@ export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = ({ c
       }
     );
 
+    if (eventSource) {
+      console.log(
+        "Initialized EventSource and listening for message events..."
+      );
+    }
+
     eventSource.onmessage = (event) => {
       try {
-        // Assuming the backend sends a full array of tickers in each message
+        // Receive a full array of tickers in each message
         const priceUpdates: PriceUpdate[] = JSON.parse(event.data);
         console.log("Price updated from SSE:", priceUpdates);
 
