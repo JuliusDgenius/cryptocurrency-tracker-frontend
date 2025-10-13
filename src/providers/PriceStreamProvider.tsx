@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState, useMemo } from "react";
 import { EventSourcePolyfill } from 'event-source-polyfill';
+import { useAuth } from "@/hooks/useAuth";
 
 export interface PriceUpdate {
   symbol: string;
@@ -18,8 +19,18 @@ export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = (
   const [priceMap, setPriceMap] = useState<Map<string, PriceUpdate>>(
     new Map()
   );
+  const {isAuthenticated, isLoading} = useAuth();
 
   useEffect(() => {
+    if (isLoading || !isAuthenticated) {
+      console.log(
+        `
+        SSE: Waiting for Auth. isLoading: ${isLoading}, 
+        isAuthenticated: ${isAuthenticated}
+        `
+      );
+      return; 
+    }
     const token = localStorage.getItem("accessToken");
     if (!token) {
         console.error("No access token found for SSE connection.");
@@ -74,7 +85,7 @@ export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = (
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [isAuthenticated, isLoading]);
 
   // Convert the map to an array for consumers of the context
   const prices = useMemo(() => Array.from(priceMap.values()), [priceMap]);

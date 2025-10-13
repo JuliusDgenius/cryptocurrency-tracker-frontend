@@ -19,7 +19,8 @@ interface RegisterApiResponse {
 
 type AuthContextType = {
   user: User | null;
-  isLoading: boolean
+  isLoading: boolean;
+  isAuthenticated: boolean;
   login: (loginResponse: LoginResponse) => Promise<void>;
   logout: () => void;
   registerContext: (registerData: RegisterDto) => Promise<RegisterApiResponse>;
@@ -34,11 +35,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   // Helper function to decode token and set user/roles
   const decodeJwtPayload = useCallback((accessToken: string): JwtPayload | null => {
     try {
       const decoded: JwtPayload = jwtDecode(accessToken);
+      setIsAuthenticated(true);
       return decoded;
     } catch (error) {
       console.error("Failed to decode access token:", error);
@@ -194,6 +197,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       refreshUser,
       hasRole,
       userRoles,
+      isAuthenticated
     }}>
       {children}
     </AuthContext.Provider>
