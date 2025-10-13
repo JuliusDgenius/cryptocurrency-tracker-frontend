@@ -36,6 +36,7 @@ export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = ({ c
       try {
         // Assuming the backend sends a full array of tickers in each message
         const priceUpdates: PriceUpdate[] = JSON.parse(event.data);
+        console.log("Price updated from SSE:", priceUpdates);
 
         // Check if the data is an array
         if (Array.isArray(priceUpdates)) {
