@@ -19,6 +19,7 @@ const LivePriceTicker: React.FC<LivePriceTickerProps> = ({
   compact = false,
 }) => {
   const prices = usePriceStream();
+  console.log("Prices received in LivePriceTicker", prices)
 
   // Filter only selected symbols (if provided)
   const filteredPrices = useMemo(() => {

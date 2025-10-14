@@ -36,8 +36,10 @@ export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = (
         console.error("No access token found for SSE connection.");
         return;
     }
-    
-    const url = '/api/stream/prices';
+    const API_BASE = import.meta.env.VITE_API_BASE?.trim() ||
+      (window.location.hostname === "localhost" ? "http://localhost:3000" : "");
+    const url = `${API_BASE}/api/stream/prices`;
+
     const eventSource = new EventSourcePolyfill(url, {
         headers: {
           Authorization: `Bearer ${token}`,
