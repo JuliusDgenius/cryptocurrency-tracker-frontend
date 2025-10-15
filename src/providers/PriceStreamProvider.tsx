@@ -59,14 +59,19 @@ export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = (
       try {
         // Receive a full array of tickers in each message
         const priceUpdates: PriceUpdate[] = JSON.parse(event.data);
-        console.log("Price updated from SSE:", priceUpdates);
+        console.log("Price updated from SSE:", priceUpdates.length, "updates");
 
         // Check if the data is an array
         if (Array.isArray(priceUpdates)) {
           setPriceMap(prevMap => {
             const newMap = new Map(prevMap);
             priceUpdates.forEach(update => {
-              newMap.set(update.symbol, update);
+              // Validate the update structure
+              if (update && update.symbol && typeof update.price === 'number') {
+                newMap.set(update.symbol, update);
+              } else {
+                console.warn("Invalid price update structure:", update);
+              }
             });
             return newMap;
           });
@@ -74,12 +79,17 @@ export const PriceStreamProvider: React.FC<{ children: React.ReactNode }> = (
            console.warn("Received non-array data from SSE:", priceUpdates);
         }
       } catch (e) {
-        console.error("Failed to parse SSE data:", e);
+        console.error("Failed to parse SSE data:", e, "Raw data:", event.data);
       }
     };
 
+    eventSource.onopen = () => {
+      console.log("SSE connection opened successfully");
+    };
+
     eventSource.onerror = (err) => {
-      console.error("SSE connection error:", err);                                                                                                                      
+      console.error("SSE connection error:", err);
+      console.error("EventSource readyState:", eventSource.readyState);
       // Don't close on every error, SSE has built-in retry logic.
       // eventSource.close();
     };
