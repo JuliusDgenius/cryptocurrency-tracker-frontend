@@ -8,7 +8,9 @@ import {
   PortfolioHeader, PortfolioSelector, PerformanceChart, 
   PortfolioSummary, AssetDistribution, RecentActivity,
   PortfolioHealth, RiskAnalysis, CorrelationMatrix,
-  CsvManagement
+  CsvManagement, BenchmarkComparisonChart, 
+  HistoricalReturnsChart,
+  PortfolioStressTest, CustomReportGenerator
 } from '../components';
 import dashboardService from '../../../api/dashboard';
 import { Portfolio } from '@/types/dashboard';
@@ -465,8 +467,10 @@ const PortfolioDashboard = () => {
               height: { xs: 'auto', sm: '400px' },
               minHeight: { xs: '300px', sm: '400px' }
             }}>
-              <Typography variant="h6" gutterBottom>Historical Returns</Typography>
-              {/* Historical returns chart would go here */}
+              <HistoricalReturnsChart 
+                portfolioId={portfolioId || ''}
+                timeFrame={timeFrame}
+              />
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -478,8 +482,10 @@ const PortfolioDashboard = () => {
               height: { xs: 'auto', sm: '400px' },
               minHeight: { xs: '300px', sm: '400px' }
             }}>
-              <Typography variant="h6" gutterBottom>Benchmark Comparison</Typography>
-              {/* Benchmark comparison chart would go here */}
+              <BenchmarkComparisonChart 
+                portfolioId={portfolioId || ''}
+                timeFrame={timeFrame}
+              />
             </Box>
           </Grid>
         </Grid>
@@ -520,8 +526,9 @@ const PortfolioDashboard = () => {
               height: { xs: 'auto', sm: '400px' },
               minHeight: { xs: '300px', sm: '400px' }
             }}>
-              <Typography variant="h6" gutterBottom>Portfolio Stress Test</Typography>
-              {/* Stress test visualization would go here */}
+              <PortfolioStressTest 
+                portfolioId={portfolioId || ''}
+              />
             </Box>
           </Grid>
         </Grid>
@@ -618,8 +625,9 @@ const PortfolioDashboard = () => {
             p: { xs: 2, sm: 3 },
             boxShadow: 1
           }}>
-            <Typography variant="h6" gutterBottom>Custom Report Generator</Typography>
-            {/* Report generator UI would go here */}
+            <CustomReportGenerator 
+              portfolioId={portfolioId || ''}
+            />
           </Box>
         </Box>
       )}

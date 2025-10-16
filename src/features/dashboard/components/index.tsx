@@ -13,6 +13,10 @@ export { default as CorrelationMatrix } from './CorrelationMatrix';
 export { CsvImportDialog } from './CsvImportDialog';
 export { CsvExportDialog } from './CsvExportDialog';
 export { CsvManagement } from './CsvManagement';
+export { default as BenchmarkComparisonChart } from './BenchmarkComparisonChart';
+export { default as HistoricalReturnsChart } from './HistoricalReturnsChart';
+export { default as PortfolioStressTest } from './PortfolioStressTest';
+export { default as CustomReportGenerator } from './CustomReportGenerator';
 
 
 
