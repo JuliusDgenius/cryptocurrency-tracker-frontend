@@ -16,6 +16,7 @@ import SettingsPage from './features/settings/pages/SettingsPage';
 import AccountsPage from './features/accounts/AccountsPage';
 import WatchlistPage from './features/watchlist/pages/WatchlistPage';
 import WatchlistDetailPage from './features/watchlist/pages/WatchlistDetailPage';
+import FooterSection from './features/home/components/FooterSection';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
             <Route path='*' element={<div>Not Found</div>} />
           </Routes>
         </main>
+        <FooterSection />
       </BrowserRouter>
     </AppErrorBoundary>
   );

@@ -2,17 +2,21 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import { ArrowRightAlt } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useTheme } from '@mui/material/styles';
+
 
 const CTASection = () => {
   const { user } = useAuth();
+  const theme = useTheme();
 
   return (
     <Container
       sx={{
         py: { xs: 8, md: 10 },
         mb: { xs: 4, md: 6 },
+        borderRadius: 3,
         textAlign: 'center',
-        bgcolor: 'background.default',
+        bgcolor: theme.palette.custom.feature,
       }}
     >
       <Typography

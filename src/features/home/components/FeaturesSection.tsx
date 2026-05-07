@@ -20,7 +20,8 @@ const FeaturesSection = () => {
   return (
     <Box 
       sx={{ py: { xs: 8, md: 10 }, 
-      backgroundColor: theme.palette.background.default
+      backgroundColor: theme.palette.custom.feature,
+      borderRadius: 3,
       }}
     >
     <Container maxWidth="lg" id='features'>
@@ -28,7 +29,7 @@ const FeaturesSection = () => {
         variant="h3"
         align="center"
         sx={{
-          mb: 2,
+          mb: 1,
           fontSize: {
           xs: '1.5rem',
           sm: '2rem',
@@ -43,7 +44,7 @@ const FeaturesSection = () => {
         align='center' 
         color='text.secondary' 
         sx={{
-        mb: 6,
+        mb: 2,
         fontSize: {
           xs: '0.875rem',
           sm: '1rem',
@@ -54,7 +55,7 @@ const FeaturesSection = () => {
           Everything you need to manage your crypto investments
       </Typography>
 
-      <Grid container spacing={{ xs: 4, md: 6 }} sx={{ py: 4 }}>
+      <Grid container spacing={{ xs: 2, md: 3 }} sx={{ py: 4 }}>
         {features.map((feature, index) => {
           const isHovered = hoveredIndex === index;
           const Icon = feature.icon;

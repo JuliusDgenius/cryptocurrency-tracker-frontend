@@ -4,7 +4,6 @@ import HeroSection from './components/HeroSection';
 import FeaturesSection from './components/FeaturesSection';
 import StatsSection from './components/StatsSection';
 import CTASection from './components/CTASection';
-import FooterSection from './components/FooterSection';
 
 const fadeInProps = {
   initial: { opacity: 0, y: 30 },
@@ -25,27 +24,32 @@ const HomePage = () => {
       }}
     >
       {/* Hero Section */}
-      <motion.div {...fadeInProps}>
-        <HeroSection />
-      </motion.div>
+      <Box py={8}>
+        <motion.div {...fadeInProps}>
+          <HeroSection />
+        </motion.div>
+      </Box>
 
       {/* Features Section */}
-      <motion.div {...fadeInProps}>
-        <FeaturesSection />
-      </motion.div>
+      <Box py={8}>
+        <motion.div {...fadeInProps}>
+          <FeaturesSection />
+        </motion.div>
+      </Box>
 
       {/* Stats Section */}
-      <motion.div {...fadeInProps}>
-        <StatsSection />
-      </motion.div>
+      <Box py={8}>
+        <motion.div {...fadeInProps}>
+          <StatsSection />
+        </motion.div>
+      </Box>
 
       {/* CTA Section */}
-      <motion.div {...fadeInProps}>
-        <CTASection />
-      </motion.div>
-
-      {/* Footer Section */}
-      <FooterSection />
+      <Box py={8}>
+        <motion.div {...fadeInProps}>
+          <CTASection />
+        </motion.div>
+      </Box>
     </Box>
   );
 };

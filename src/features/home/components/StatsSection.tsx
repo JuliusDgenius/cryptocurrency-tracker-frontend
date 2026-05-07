@@ -9,7 +9,8 @@ const StatsSection = () => {
         bgcolor: 'background.paper',
         py: { xs: 6, md: 10 },
         mb: { xs: 4, md: 6 },
-        overflow: 'hidden', // Prevent animation overflow
+        borderRadius: 3,
+        overflow: 'hidden',
       }}
     >
       <Container maxWidth="lg">

@@ -29,6 +29,8 @@ const HeroSection = () => {
         py: { xs: 8, sm: 12, md: 15 },
         overflow: 'hidden',
         textAlign: 'center',
+        borderRadius: 3,
+        bgcolor: theme.palette.background.paper
       }}
     >
       {/* Floating Icons */}
