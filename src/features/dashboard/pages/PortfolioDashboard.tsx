@@ -152,7 +152,12 @@ const PortfolioDashboard = () => {
   return (
     <Container 
       maxWidth="xl"
-      sx={{ pt: { xs: 1, sm: 2 }, pb: { xs: 3, sm: 6 } }}>
+      sx={
+        { 
+          pt: { xs: 1, sm: 2 }, 
+          pb: { xs: 3, sm: 6, md: 20 } 
+        }
+      }>
       {/* Portfolio Header and Navigation */}
       <Box sx={{ 
         display: 'flex', 

@@ -1,18 +1,8 @@
 import { useAuth } from "../hooks/useAuth";
 import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Button,
-  Box,
-  Menu,
-  MenuItem,
-  Avatar,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
+  AppBar, Toolbar, IconButton, Typography,
+  Button, Box, Menu, MenuItem, Avatar,
+  Drawer, List, ListItem, ListItemText,
   useMediaQuery,
 } from "@mui/material";
 import {

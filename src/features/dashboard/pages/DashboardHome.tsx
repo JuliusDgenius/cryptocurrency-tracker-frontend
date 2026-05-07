@@ -32,7 +32,7 @@ const DashboardHome = () => {
     };
 
     fetchPortfolios();
-  }, []);
+  }, [portfolios]);
 
   const handleCreatePortfolio = async (
     name: string, description: string = ''
@@ -97,10 +97,10 @@ const DashboardHome = () => {
       sx={{ 
         pt: { xs: 6, md: 10 }, 
         px: { xs: 1, sm: 2, md: 4 }, 
-        pb: { xs: 3, md: 6 },
+        pb: { xs: 6, md: 20 },
         mt: { xs: 4, md: 6 }
       }}>
-      <Box sx={{ mb: { xs: 3, md: 4 } }}>
+      <Box sx={{ mb: { xs: 4, md: 8 } }}>
         <Typography 
           variant="h4" 
           component="h1" 
@@ -167,10 +167,10 @@ const DashboardHome = () => {
             onClick={() => setOpenCreateDialog(true)}
             sx={{ 
               mr: { xs: 0, sm: 2 },
-               mb: { xs: 2, sm: 0 },
-                px: 4, py: 1.5, 
-                fontSize: { xs: '1rem', md: '1.1rem' } 
-              }}
+              mb: { xs: 2, sm: 0, md: 4 },
+              px: 4, py: 1.5, 
+              fontSize: { xs: '1rem', md: '1.1rem' } 
+            }}
           >
             Create Portfolio
           </Button>
@@ -178,7 +178,11 @@ const DashboardHome = () => {
             variant="outlined"
             component={Link}
             to="/learn"
-            sx={{ px: 4, py: 1.5, fontSize: { xs: '1rem', md: '1.1rem' } }}
+            sx={{ 
+              px: 4, 
+              py: 1.5, 
+              fontSize: { xs: '1rem', md: '1.1rem' },
+            }}
           >
             Learn How It Works
           </Button>

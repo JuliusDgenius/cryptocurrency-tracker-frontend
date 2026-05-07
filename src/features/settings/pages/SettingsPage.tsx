@@ -77,7 +77,14 @@ const SettingsPage = () => {
   }, []);
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container 
+      maxWidth="md" 
+      sx={{ 
+        py: { xs: 8, md: 12 },
+        mb: { sx: 8, md: 24 },
+        mt: { sx: 4, md: 6 },
+      }}
+    >
       <Typography variant="h4" component="h1" gutterBottom>
         Settings
       </Typography>

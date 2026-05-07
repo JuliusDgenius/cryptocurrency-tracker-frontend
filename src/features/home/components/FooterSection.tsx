@@ -46,14 +46,18 @@ import {
         sx={{
           bgcolor: 'background.paper',
           borderTop: `1px solid ${dividerColor}`,
-          py: { xs: 6, md: 8 },
+          py: { xs: 8, md: 12 },
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" disableGutters>
           <Grid container spacing={{ xs: 4, md: 8 }}>
             {/* Brand */}
             <Grid item xs={12} md={4}>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 700 }}>
+              <Typography 
+                variant="h6" 
+                gutterBottom 
+                sx={{ fontWeight: 700, color: 'white' }}
+              >
                 <Box component="span" sx={{ color: '#22d3ee' }}>
                   Crypto
                 </Box>
@@ -74,7 +78,7 @@ import {
                 <Typography 
                   variant="subtitle1" 
                   gutterBottom 
-                  sx={{ fontWeight: 600 
+                  sx={{ fontWeight: 600, color: 'white',
                 }}>
                   {col.title}
                 </Typography>
@@ -106,7 +110,7 @@ import {
                 variant="subtitle1" 
                 gutterBottom 
                 sx={{ 
-                  fontWeight: 600 
+                  fontWeight: 600, color: 'white',
                   }}
                 >
                 Connect With Us
